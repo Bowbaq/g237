@@ -4,10 +4,9 @@
 /client/app/modules/test.js
 /server/node_modules/
 /server/data
-/server2/node_modules
-/server2/log
-/server2/test/controllers/posts_controller_test.js
-/server2/app/views/posts/
-/server2/app/views/layouts/posts_layout.ejs
-/server2/app/helpers/posts_helper.js
-/server2/app/controllers/posts_controller.js
+/server/log
+/server/test/controllers/posts_controller_test.js
+/server/app/views/posts/
+/server/app/views/layouts/posts_layout.ejs
+/server/app/helpers/posts_helper.js
+/server/app/controllers/posts_controller.js

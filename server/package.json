@@ -1,21 +1,25 @@
-{
-    "name": "g237-server",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "start": "node server.js"
-    },
-    "engines": {
-        "node": "0.8.x",
-        "npm": "1.1.x"
-    },
-    "dependencies": {
-        "express":                  "3.0.3",
-        "connect-flash":            "0.1.0",
-        "passport":                 "0.1.15",
-        "passport-local":           "0.1.6",
-        "passport-local-mongoose":  "0.1.0",
-        "path":                     "0.4.9",
-        "mongoose":                 "3.4.0"
-    }
+{ "name": "g237-server"
+, "version": "0.0.1"
+, "engines": ["node >= 0.4.0"]
+, "main": "server.js"
+, "dependencies":
+  { "ejs":                      "*"
+  , "ejs-ext":                  "< 0.1.2"
+  , "express":                  "~2.x"
+  , "railway":                  ">= 0.2.6"
+  , "jugglingdb":               ">= 0.1.0"
+  , "coffee-script":            ">= 1.1.1"
+  , "mongoose":                 "3.4.0"
+  , "passport":                 "0.1.15"
+  , "passport-local":           "0.1.6"
+  , "passport-local-mongoose":  "0.1.0"
+  },
+  "devDependencies":
+  { "nodeunit":         "*"
+  , "sinon":            "*"
+  , "semicov":          "*"
+  }
+, "scripts":
+  { "test": "nodeunit test/*/*"
+  }
 }
