@@ -129,6 +129,7 @@ module.exports = function(grunt) {
     //  To learn more about using the server task, please refer to the code
     //  until documentation has been written.
     server: {
+      host: "0.0.0.0", port: 8080,
       // Ensure the favicon is mapped correctly.
       files: { "favicon.ico": "favicon.ico" },
 
@@ -186,7 +187,7 @@ module.exports = function(grunt) {
 
     // The clean task ensures all files are removed from the dist/ directory so
     // that no files linger from previous builds.
-    clean: ["dist/"],
+    clean: ["dist/"]
 
     // If you want to generate targeted `index.html` builds into the `dist/`
     // folders, uncomment the following configuration block and use the

@@ -1,0 +1,6 @@
+.DS_Store
+/client/app/templates/test.html
+/client/app/styles/test.styl
+/client/app/modules/test.js
+/server/node_modules/
+server/data
