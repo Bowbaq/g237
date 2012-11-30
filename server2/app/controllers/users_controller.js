@@ -9,18 +9,28 @@ action('new', function () {
 });
 
 action(function create() {
-    User.create(req.body.User, function (err, user) {
-        if (err) {
-            flash('error', 'User can not be created');
-            render('new', {
-                user: user,
-                title: 'New user'
-            });
-        } else {
-            flash('info', 'User created');
-            redirect(path_to.users());
-        }
-    });
+  User.findOne({ username: req.body.User.username }, function(err, user) {
+    if(user) {
+      flash('error', 'User already exists : ' + user.username);
+      render('new', {
+          user: user,
+          title: 'New user'
+      });
+    } else {
+      User.create(req.body.User, function (err, user) {
+          if (err) {
+              flash('error', 'User can not be created');
+              render('new', {
+                  user: user,
+                  title: 'New user'
+              });
+          } else {
+              flash('info', 'User created');
+              redirect(path_to.users());
+          }
+      });
+    }
+  });
 });
 
 action(function index() {
@@ -43,20 +53,20 @@ action(function edit() {
 });
 
 action(function update() {
-    this.user.updateAttributes(body.User, function (err) {
-        if (!err) {
-            flash('info', 'User updated');
-            redirect(path_to.user(this.user));
-        } else {
-            flash('error', 'User can not be updated');
-            this.title = 'Edit user details';
-            render('edit');
-        }
-    }.bind(this));
+  User.findByIdAndUpdate(this.user.id, body.User, function(err) {
+    if (!err) {
+      flash('info', 'User updated');
+      redirect(path_to.user(this.user));
+    } else {
+      flash('error', 'User can not be updated');
+      this.title = 'Edit user details';
+      render('edit');
+    }
+  }.bind(this));
 });
 
 action(function destroy() {
-  User.remove({id: this.user.id }, function(err) {
+  this.user.remove(function(err) {
     if (err) {
       flash('error', 'Can not destroy user');
     } else {

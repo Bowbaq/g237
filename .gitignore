@@ -6,3 +6,8 @@
 /server/data
 /server2/node_modules
 /server2/log
+/server2/test/controllers/posts_controller_test.js
+/server2/app/views/posts/
+/server2/app/views/layouts/posts_layout.ejs
+/server2/app/helpers/posts_helper.js
+/server2/app/controllers/posts_controller.js
