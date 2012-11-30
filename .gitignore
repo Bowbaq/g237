@@ -3,4 +3,6 @@
 /client/app/styles/test.styl
 /client/app/modules/test.js
 /server/node_modules/
-server/data
+/server/data
+/server2/node_modules
+/server2/log
