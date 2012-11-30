@@ -27,12 +27,15 @@ customSchema(function () {
     var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
     var persister = require('passport-local-mongoose');
     
-    mongoose.connect('mongodb://localhost/g237');
+    // mongoose.connect('mongodb://localhost/g237');
     
     var UserSchema = new Schema({
+      username: String
     });
-    
+        
     UserSchema.plugin(persister);
+
+    console.log(UserSchema);
 
     var User = mongoose.model('User', UserSchema);
     User.modelName = 'User'; // this is for some features inside railway (helpers, etc)

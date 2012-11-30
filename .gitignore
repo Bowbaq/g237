@@ -10,3 +10,7 @@
 /server/app/views/layouts/posts_layout.ejs
 /server/app/helpers/posts_helper.js
 /server/app/controllers/posts_controller.js
+/server/node_modules
+/server.old
+/server.old.old
+/server.tmp

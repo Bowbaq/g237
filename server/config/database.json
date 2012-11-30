@@ -1,10 +1,17 @@
-{ "development":
-  { "driver":   "memory"
-  }
-, "test":
-  { "driver":   "memory"
-  }
-, "production":
-  { "driver":   "memory"
-  }
+{
+    "development": {
+        "database": "g237-dev", 
+        "driver": "mongoose", 
+        "host": "localhost"
+    }, 
+    "production": {
+        "database": "g237-production", 
+        "driver": "mongoose", 
+        "host": "localhost"
+    }, 
+    "test": {
+        "database": "g237-test", 
+        "driver": "mongoose", 
+        "host": "localhost"
+    }
 }
