@@ -1,5 +1,7 @@
 load('application');
 
+layout('application');
+
 before(loadUser, {only: ['show', 'edit', 'update', 'destroy']});
 
 action('new', function () {
@@ -9,27 +11,42 @@ action('new', function () {
 });
 
 action(function create() {
-  User.findOne({ username: req.body.User.username }, function(err, user) {
-    if(user) {
-      flash('error', 'User already exists : ' + user.username);
-      render('new', {
-          user: user,
+  var username = req.body.User.username,
+      password = req.body.User.password
+  ;
+
+  User.findOne({username : username }, function(err, existingUser) {
+      if (err || existingUser) {
+        flash('error', 'User already exists');
+        render('new', {
+          user: existingUser,
           title: 'New user'
-      });
-    } else {
-      User.create(req.body.User, function (err, user) {
+        });
+      } else {
+        var user = new User({ username : username });
+        user.setPassword(password, function(err) {
           if (err) {
-              flash('error', 'User can not be created');
-              render('new', {
-                  user: user,
-                  title: 'New user'
-              });
+            flash('error', 'User couldn\'t be created');
+            render('new', {
+              user: user,
+              title: 'New user'
+            });
           } else {
-              flash('info', 'User created');
-              redirect(path_to.users());
+            user.save(function(err) {
+              if (err) {
+                flash('error', 'User couldn\'t be created');
+                render('new', {
+                    user: user,
+                    title: 'New user'
+                });
+              } else {
+                flash('info', 'User created');
+                redirect(path_to.users());
+              }
+            });
           }
-      });
-    }
+        });
+      }  
   });
 });
 
