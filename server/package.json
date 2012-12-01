@@ -15,12 +15,14 @@
         "semicov": "*", 
         "sinon": "*"
     }, 
-    "engines": [
-        "node >= 0.4.0"
-    ], 
+    "engines": {
+        "node": "0.8.x",
+        "npm": "1.1.x"
+    },
     "main": "server.js", 
     "name": "g237-server", 
     "scripts": {
+        "start": "node server.js",
         "test": "nodeunit test/*/*"
     }, 
     "version": "0.0.1"

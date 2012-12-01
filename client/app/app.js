@@ -6,7 +6,8 @@ define([
   // creation.
   var app = {
     // The root path to run the application.
-    root: "/"
+    root: "/",
+    api_root: "http://10.0.0.2:8888/"
   };
 
   // Localize or create a new JavaScript Template object.
@@ -56,5 +57,4 @@ define([
       return this.layout = layout;
     }
   }, Backbone.Events);
-
 });

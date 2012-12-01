@@ -40,29 +40,3 @@ action(function logout() {
   req.logout();
   res.status(200).send();
 });
-
-// $.ajax({
-//     type: "POST",
-//     url: "http://localhost:8888/api/authenticate",
-//     data: {
-//         username: "Max",
-//         password: "abcdef",
-//     },
-//     error: function(xhr, status, err) {
-//         console.log(xhr, status, err);
-//     },
-//     success: function(data) {
-//         console.log(data);
-//     }
-// });
-// 
-// $.ajax({
-//     type: "GET",
-//     url: "http://localhost:8888/api/logout",
-//     error: function(xhr, status, err) {
-//         console.log(xhr, status, err);
-//     },
-//     success: function(data) {
-//         console.log(data);
-//     }
-// });

@@ -18,15 +18,15 @@ function(app) {
   });
 
   // Default View.
-  Header.Views.Layout = Backbone.Layout.extend({
-    template: "header",
-    
-    initialize: function(){
-      console.log("Initialized header view", this.model.toJSON());
-    },
-    
+  Header.Views.Title = Backbone.Layout.extend({
+    template: "partial/header/header-title",
+        
     serialize: function() {
       return this.model.toJSON();
+    },
+    
+    beforeRender: function() {
+      this.$el.attr('data-role', 'header').attr('data-id', 'header').attr('data-position', 'fixed');
     }
   });
 

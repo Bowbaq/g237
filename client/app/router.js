@@ -2,56 +2,70 @@ define([
   // Application.
   "app",
   
-  "modules/auth",
-  "modules/header"
+  "plugins/backbone-filter"
 ],
 
-function(app, Auth, Header) {
+function(app) {
 
   // Defining the application router, you can attach sub routers here.
   var Router = Backbone.Router.extend({
+    before: {
+      ".*": function() {
+        this.checkAuthentication();
+      }
+    },
+    
     routes: {
-      "": "index"
+      "login":        "login",
+      "logout":       "logout",
+      "":             "projects"
     },
     
     initialize: function () {
       // Handle back button throughout the application
-      $('.back-button').on('click', function(event) {
-          window.history.back();
-          return false;
-      });
-      this.firstPage = true;
+      // $('.back-button').on('click', function(event) {
+      //     window.history.back();
+      //     return false;
+      // });
+      
+      this.first = true;
     },
 
-    index: function () {
-      var main = new Backbone.Layout({
-        template: "layout/page",
-
-        views: {
-          '[data-role="header"]': new Header.Views.Layout({
-            model: new Header.Model({title: "Login"}),
-            el: "[data-id='header']"
-          }),
-          '[data-role="content"]': new Auth.Views.Login({
-            model: new Auth.Model()
-          })
-        }
-      });
-      
-      this.changePage(main);
+    projects: function() {
+      this.changePage(new Backbone.Layout({
+        template: "layout/page"
+      }));
     },
     
-    changePage:function (page) {
+    login: function() {
+      if(app.account.get('authenticated')) {
+        this.navigate('/', {trigger: true});
+      }
+      this.changePage(new app.Auth.page(), 'none');
+    },
+    
+    logout: function() {
+      if(app.account.get('authenticated')) {
+        app.Auth.logout();
+      }
+      this.changePage(new app.Auth.page(), 'none');
+    },
+    
+    checkAuthentication: function() {
+      if(!app.account.get('authenticated')) {
+        this.navigate('/login', {trigger: true});
+      }
+    },
+    
+    changePage:function (page, transition) {
       page.$el.attr('data-role', 'page');
       page.render().done(function() {
         $('body').append(page.el);
-        var transition = $.mobile.defaultPageTransition;
-        // We don't want to slide the first page
-        if (this.firstPage) {
-            transition = 'none';
-            this.firstPage = false;
-        }
-        $.mobile.changePage(page.$el, {changeHash:false, transition: transition});
+        $.mobile.changePage(page.$el, {
+          changeHash:false, 
+          transition: this.first ? 'none' : transition || $.mobile.defaultPageTransition
+        });
+        this.first = false; 
       }.bind(this));
     }
   });

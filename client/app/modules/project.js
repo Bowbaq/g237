@@ -12,7 +12,6 @@ function(app) {
 
   // Default Model.
   Project.Model = Backbone.Model.extend({
-  
   });
 
   // Default Collection.
@@ -21,8 +20,8 @@ function(app) {
   });
 
   // Default View.
-  Project.Views.Layout = Backbone.Layout.extend({
-    template: "project"
+  Project.Views.List = Backbone.Layout.extend({
+    template: "project/list"
   });
 
   // Return the module for AMD compliance.

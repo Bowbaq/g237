@@ -23,7 +23,9 @@ require.config({
             ]
         },
         
-        // Backbone.localstorage depends on Backbone.
-        "plugins/backbone-localstorage": ["backbone"]
+        // Backbone-localstorage depends on Backbone.
+        "plugins/backbone-localstorage": ["backbone"],
+        // Backbone-filter depends on Backbone.
+        "plugins/backbone-filter": ["backbone"]
     }
 });

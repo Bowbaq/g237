@@ -32,7 +32,8 @@ app.configure(function() {
     
     app.use(express.cookieParser('Eg8v4vQnHry2Yvj7WQyKXv6VwPw3Z8baoWfVvE27J8aHJM1zqZ'));
     app.use(express.session({
-        secret: 'Eg8v4vQnHry2Yvj7WQyKXv6VwPw3Z8baoWfVvE27J8aHJM1zqZ'
+        secret: 'Eg8v4vQnHry2Yvj7WQyKXv6VwPw3Z8baoWfVvE27J8aHJM1zqZ',
+        maxAge: new Date(Date.now() + (90 * 86400 * 1000))
     }));
     
     app.use(passport.initialize());

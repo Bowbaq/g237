@@ -9,7 +9,6 @@ define(['jquery'], function ($) {
         // Remove page from DOM when it's being replaced
         $('body').on({
           "pagehide": function (event, ui) {
-            console.log("Removing ", event.currentTarget);
             $(event.currentTarget).remove();
           }
         }, 'div[data-role="page"]');
@@ -22,9 +21,9 @@ define(['jquery'], function ($) {
         // //enable flag to disable rendering
         // $.mobile.ignoreContentEnabled=true;
         // // enable loading page+icon
-        // $.mobile.loader.prototype.options.text = "loading";
-        // $.mobile.loader.prototype.options.textVisible = false;
-        // $.mobile.loader.prototype.options.theme = "a";
-        // $.mobile.loader.prototype.options.html = "";
+        $.mobile.loader.prototype.options.text = "loading";
+        $.mobile.loader.prototype.options.textVisible = false;
+        $.mobile.loader.prototype.options.theme = "a";
+        $.mobile.loader.prototype.options.html = "";
     });
 });

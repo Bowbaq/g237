@@ -3,14 +3,26 @@ require([
   "app",
 
   // Main Router.
-  "router"
+  "router",
+  
+  // Helper modules
+  "modules/auth",
+  "modules/partial/header"
 ],
 
-function(app, Router) {
+function(app, Router, Auth, Header) {
 
   // Define your master router on the application namespace and trigger all
   // navigation from this instance.
   app.router = new Router();
+  
+  // Authentication management
+  app.Auth = Auth;
+  app.account = new Auth.Model();
+  
+  // Gobal view helpers
+  app.helpers = {};
+  app.helpers.Header = Header;
 
   // Trigger the initial route and enable HTML5 History API support, set the
   // root folder to '/' by default.  Change in app.js.
