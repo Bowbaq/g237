@@ -2,10 +2,12 @@ define([
   // Application.
   "app",
   
+  "modules/project",
+  
   "plugins/backbone-filter"
 ],
 
-function(app) {
+function(app, Project) {
 
   // Defining the application router, you can attach sub routers here.
   var Router = Backbone.Router.extend({
@@ -32,23 +34,21 @@ function(app) {
     },
 
     projects: function() {
-      this.changePage(new Backbone.Layout({
-        template: "layout/page"
-      }));
+      this.changePage(Project.gallery());
     },
     
     login: function() {
       if(app.account.get('authenticated')) {
         this.navigate('/', {trigger: true});
       }
-      this.changePage(new app.Auth.page(), 'none');
+      this.changePage(app.Auth.page(), 'none');
     },
     
     logout: function() {
       if(app.account.get('authenticated')) {
         app.Auth.logout();
       }
-      this.changePage(new app.Auth.page(), 'none');
+      this.changePage(app.Auth.page(), 'none');
     },
     
     checkAuthentication: function() {

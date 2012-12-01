@@ -15,7 +15,7 @@ function(app) {
 
   // Default Model.
   Auth.Model = Backbone.Model.extend({
-    id: 'auth-token',
+    id: 'token',
         
     defaults: {
       authenticated: false,
@@ -111,9 +111,7 @@ function(app) {
       template: "layout/page",
     
       views: {
-        '#header': new app.helpers.Header.Views.Title({
-          model: new app.helpers.Header.Model({title: "Login"})
-        }),
+        '#header': app.helpers.Header.create("Authenticate"),
         '[data-role="content"]': new Auth.Views.Login({
           model: app.account
         })
