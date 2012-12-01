@@ -35,6 +35,10 @@ function(app) {
         button.swatch = 'a';
       }
       
+      if(!button.data) {
+        button.data = {};
+      }
+      
       if(button.side === 'right') {
         this.model.set({'rightButton': button });
       } else {
@@ -49,7 +53,12 @@ function(app) {
         side: 'left',
         text: 'Back',
         link: '#',
-        icon: 'delete'
+        icon: 'delete',
+        data: {
+          // rel: 'back',
+          // back: 'true',
+          // direction: 'reverse'
+        }
       });
     }
   });

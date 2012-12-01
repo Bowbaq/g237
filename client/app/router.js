@@ -2,7 +2,7 @@ define([
   // Application.
   "app",
   
-  "modules/project",
+  "modules/project/main",
   
   "plugins/backbone-filter"
 ],
@@ -18,10 +18,14 @@ function(app, Project) {
     },
     
     routes: {
+      // Authentication routes
       "login":            "login",
       "logout":           "logout",
+      
+      // Project routes
       "":                 "listProjects",
-      "projects/create":  "createProject"
+      "projects/create":  "createProject",
+      "projects/show/:id": "showProject"
     },
     
     initialize: function () {
@@ -44,6 +48,10 @@ function(app, Project) {
     
     createProject: function() {
       this.changePage(Project.form());
+    },
+    
+    showProject: function(id) {
+      console.log(id);
     },
     
     login: function() {
