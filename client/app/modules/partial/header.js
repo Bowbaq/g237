@@ -20,7 +20,7 @@ function(app) {
 
   // Default View.
   Header.Views.Layout = Backbone.Layout.extend({
-    template: "partial/header",
+    template: "layout/partial/header",
         
     serialize: function() {
       return this.model.toJSON();
@@ -31,6 +31,10 @@ function(app) {
     },
     
     add: function(button) {
+      if(!button.swatch) {
+        button.swatch = 'a';
+      }
+      
       if(button.side === 'right') {
         this.model.set({'rightButton': button });
       } else {
@@ -38,6 +42,15 @@ function(app) {
       }
       
       return this;
+    },
+    
+    addBack: function() {
+      return this.add({
+        side: 'left',
+        text: 'Back',
+        link: '#',
+        icon: 'delete'
+      });
     }
   });
   

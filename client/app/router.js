@@ -18,23 +18,32 @@ function(app, Project) {
     },
     
     routes: {
-      "login":        "login",
-      "logout":       "logout",
-      "":             "projects"
+      "login":            "login",
+      "logout":           "logout",
+      "":                 "listProjects",
+      "projects/create":  "createProject"
     },
     
     initialize: function () {
       // Handle back button throughout the application
-      // $('.back-button').on('click', function(event) {
-      //     window.history.back();
-      //     return false;
-      // });
+      
+      $('body').on({
+        "click": function (event) {
+          event.preventDefault();
+          window.history.back();
+          return false;
+        }
+      }, '[data-rel="back"]');
       
       this.first = true;
     },
 
-    projects: function() {
+    listProjects: function() {
       this.changePage(Project.gallery());
+    },
+    
+    createProject: function() {
+      this.changePage(Project.form());
     },
     
     login: function() {

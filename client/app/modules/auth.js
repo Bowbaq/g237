@@ -46,7 +46,7 @@ function(app) {
   });
 
   // Default View.
-  Auth.Views.Login = Backbone.Layout.extend({
+  Auth.Views.Form = Backbone.Layout.extend({
     template: "login",
     
     events: {
@@ -112,7 +112,7 @@ function(app) {
     
       views: {
         '#header': app.helpers.Header.create("Authenticate"),
-        '[data-role="content"]': new Auth.Views.Login({
+        '#content': new Auth.Views.Form({
           model: app.account
         })
       }

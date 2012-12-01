@@ -16,7 +16,10 @@ function(app) {
   // Default Model.
   Project.Model = Backbone.Model.extend({
     defaults: {
-      name: ''
+      name: '',
+      description: '',
+      viewed: 0,
+      reviewed: 0
     }
   });
 
@@ -39,7 +42,6 @@ function(app) {
   });
   
   app.Projects = new Project.Collection();
-  app.Projects.create({'name': 'Some project name'});
   
   // Item view
   Project.Views.Item = Backbone.Layout.extend({
@@ -68,12 +70,10 @@ function(app) {
     
     initialize: function() {
       this.collection.on("reset", function test() {
-        console.log('reset');
         this.render();
       }, this);
 
       this.collection.on("add", function(project) {
-        console.log('add');
         this.insertView(new Project.Views.Item({
           model: project
         })).render();
@@ -83,40 +83,100 @@ function(app) {
     }
   });
   
+  // Gallery controls
+  Project.Views.GalleryControls = Backbone.Layout.extend({
+    template: 'project/gallery-controls',
+        
+    events: {
+      'click #reviewed' : 'orderByReviews',
+      'click #updated' : 'orderByLastUpdated'
+    },
+    
+    orderByReviews: function() {
+      $('#updated').removeClass('ui-btn-active');
+      $('#reviewed').addClass('ui-btn-active');
+    },
+
+    orderByLastUpdated: function() {
+      $('#reviewed').removeClass('ui-btn-active');
+      $('#updated').addClass('ui-btn-active');
+    }
+  });
+  
+  // Creation form
+  Project.Views.Form = Backbone.Layout.extend({
+    template: "project/form",
+    
+    events: {
+      'submit #create-project-form' : 'create'
+    },
+    
+    create: function(e) {
+      e.preventDefault();
+      var project = this.collection.create(this.serializeForm());
+      app.router.navigate('/projects/show/' + project.id, {trigger: true});
+    },
+    
+    serializeForm: function() {
+      return {
+        name: $('#name').val(),
+        description: $('#desc').val(),
+        link: $('#link').val(),
+        created_at: new Date(),
+        updated_at: new Date()
+      };
+    }
+  });
+  
   Project.gallery = function() {
     var header = app.helpers.Header
       .create("Gallery")
       .add({
         side: 'right',
         text: 'Add',
-        link: 'project/create',
+        link: 'projects/create',
         icon: 'plus'
       })
     ;
     
+    var footer = app.helpers.Footer.create({index: 1});
+    
     return new Backbone.Layout({
-      template: "layout/project-page",
-      
-      events: {
-        'click #reviewed' : 'orderByReviews',
-        'click #updated' : 'orderByLastUpdated'
-      },
+      template: "layout/page",
     
       views: {
         '#header': header,
-        '#gallery': new Project.Views.Gallery({
+        '#content': new Backbone.Layout({
+          template: "project/gallery",
+          
+          views: {
+            '#controls' : new Project.Views.GalleryControls({
+              collection: app.Projects
+            }),
+            '#gallery' : new Project.Views.Gallery({
+              collection: app.Projects
+            })
+          }
+        }),
+        '#footer': footer
+      }
+    });
+  };
+  
+  Project.form = function() {
+    var header = new app.helpers.Header
+      .create('New Project')
+      .addBack()
+    ;
+    
+    return new Backbone.Layout({
+      template: "layout/page",
+      
+      views: {
+        '#header': header,
+        '[data-role="content"]': new Project.Views.Form({
           collection: app.Projects
         })
-      },
-
-      orderByReviews: function() {
-        $('#updated').removeClass('ui-btn-active');
-        $('#reviewed').addClass('ui-btn-active');
-      },
-
-      orderByLastUpdated: function() {
-        $('#reviewed').removeClass('ui-btn-active');
-        $('#updated').addClass('ui-btn-active');
       }
     });
   };

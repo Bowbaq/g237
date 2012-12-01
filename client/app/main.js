@@ -7,10 +7,11 @@ require([
   
   // Helper modules
   "modules/auth",
-  "modules/partial/header"
+  "modules/partial/header",
+  "modules/partial/footer"
 ],
 
-function(app, Router, Auth, Header) {
+function(app, Router, Auth, Header, Footer) {
 
   // Define your master router on the application namespace and trigger all
   // navigation from this instance.
@@ -23,6 +24,7 @@ function(app, Router, Auth, Header) {
   // Gobal view helpers
   app.helpers = {};
   app.helpers.Header = Header;
+  app.helpers.Footer = Footer;
 
   // Trigger the initial route and enable HTML5 History API support, set the
   // root folder to '/' by default.  Change in app.js.
