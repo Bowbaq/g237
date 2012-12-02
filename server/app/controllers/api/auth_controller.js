@@ -30,7 +30,8 @@ action(function authenticate() {
       }
       
       res.status(200).send({
-        id: user.id
+        id: user.id,
+        username: user.username
       });
     });
   })(req, res, next);

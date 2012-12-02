@@ -4,7 +4,6 @@ define(["app", "backbone"], function(app, Backbone) {
   // Item view
   Views.Item = Backbone.Layout.extend({
     template: "project/item",
-
     tagName: 'li',
 
     serialize: function() {
@@ -25,19 +24,25 @@ define(["app", "backbone"], function(app, Backbone) {
         }));
       }, this);
     },
+    
+    afterRender: function() {
+      $('[data-role=]')
+    },
 
     initialize: function() {
       this.collection.on("reset", function test() {
+        console.log('reset event');
         this.render();
       }, this);
-
+      
       this.collection.on("add", function(project) {
+        console.log('add event');
         this.insertView(new Views.Item({
           model: project
         })).render();
       }, this);
-
-      this.collection.fetch();
+      // 
+      // // this.collection.fetch();
     }
   });
   
@@ -71,7 +76,11 @@ define(["app", "backbone"], function(app, Backbone) {
 
     create: function(e) {
       e.preventDefault();
-      var project = this.collection.create(this.serializeForm());
+      var project = this.collection.create(this.serializeForm(), {wait: true, success: this.afterCreate });
+      this.resetForm();
+    },
+    
+    afterCreate: function(project, response) {
       app.router.navigate('/projects/show/' + project.id, {trigger: true});
     },
 
@@ -83,6 +92,21 @@ define(["app", "backbone"], function(app, Backbone) {
         created_at: new Date(),
         updated_at: new Date()
       };
+    },
+    
+    resetForm: function() {
+      $('#name').val('');
+      $('#desc').val('');
+      $('#link').val('');
+    }
+  });
+  
+  Views.Show = Backbone.Layout.extend({
+    template: "project/show",
+    
+    serialize: function() {
+      console.log(this.model.toJSON());
+      return this.model.toJSON();
     }
   });
   

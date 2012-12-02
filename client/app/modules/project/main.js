@@ -16,6 +16,7 @@ function(app, Model, Collection, Views) {
   // Project collection
   Project.Collection = Collection;
   app.Projects = new Project.Collection();
+  app.Projects.fetch();
   
   Project.Views = Views;
   
@@ -67,8 +68,29 @@ function(app, Model, Collection, Views) {
       
       views: {
         '#header': header,
-        '[data-role="content"]': new Project.Views.Form({
+        '#content': new Project.Views.Form({
           collection: app.Projects
+        })
+      }
+    });
+  };
+  
+  
+  Project.show = function(id) {
+    var project = app.Projects.get(id);
+        
+    var header = new app.helpers.Header
+      .create(project.get('name'))
+      .addBack()
+    ;
+    
+    return new Backbone.Layout({
+      template: "layout/page",
+      
+      views: {
+        '#header': header,
+        '#content': new Project.Views.Show({
+          model: project
         })
       }
     });

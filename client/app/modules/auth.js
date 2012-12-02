@@ -19,28 +19,30 @@ function(app) {
         
     defaults: {
       authenticated: false,
-      user_id: null
+      user: null
     },
     
     localStorage: new Backbone.LocalStorage("g237-auth"),
     
     initialize: function() {
-      this.bind('change:user_id', this.onIdChange, this);
+      this.bind('change:user', this.onUserChange, this);
       if(this.localStorage.find(this)) {
         this.fetch();
       }
       if(this.get('authenticated')) {
-        console.log('User is logged in');
+        console.log('User is logged in', this.get('user'));
       }
     },
     
-    onIdChange: function(status, id) {
-      this.set({'authenticated': !!id});
+    onUserChange: function(status, user) {
+      this.set({
+        'authenticated': user && !!user.id
+      });
     },
     
-    setId: function(id) {
+    setUser: function(user) {
       this.save({
-        'user_id': id
+        'user': user
       });
     }
   });
@@ -82,15 +84,16 @@ function(app) {
       error: function(xhr, status, err) {
         console.log(xhr, status, err);
       },
-      success: function(data) {
-        app.account.setId(data.id);
-        app.router.navigate('', {trigger: true});
+      success: function(user) {
+        app.account.setUser(user);
+        app.router.navigate('/', {trigger: true});
       }
     });
   };
   
   Auth.logout = function() {
     if(!app.account.get('authenticated')) {
+      console.log('Aborting logout');
       return;
     }
     
@@ -101,7 +104,7 @@ function(app) {
         console.log(xhr, status, err);
       },
       success: function() {
-        app.account.setId('');
+        app.account.setUser(null);
       }
     });
   };

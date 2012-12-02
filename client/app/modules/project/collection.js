@@ -3,8 +3,8 @@ define(["app", "backbone", "modules/project/model", "plugins/backbone-localstora
   var Collection = Backbone.Collection.extend({
     model: Model,
     
-    localStorage: new Backbone.LocalStorage('g237-projects'),
-    
+    url: app.api_root + 'api/projects',
+            
     next: function() {
       if(!this.length) {
         return 1;

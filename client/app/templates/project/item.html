@@ -1,8 +1,8 @@
-<a href="/projects/show/<%= id %>">
+<a href="/projects/show/<%= _id %>">
     <h3><%= name %></h3>
     <p><%= description %></p>
     <div>
-        <p>Last update: <strong><%= new Date() %></strong></p>
+        <p>Last update: <strong><%= updated_at %></strong></p>
         <p class="ui-li-aside">Reviews: <strong><%= reviewed %></strong></p>
     </div>
 </a>
