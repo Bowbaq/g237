@@ -1,7 +1,7 @@
 <% if(leftButton) { %>
     <a  href="<%= leftButton.link %>"
     <% if(leftButton.id) { %> id="<%= leftButton.id %>" <%}%>
-    class="ui-btn-left" 
+    <% if(leftButton.class) { %> class="<%= leftButton.class %>" <%}%>
     data-icon="<%= leftButton.icon %>" 
     data-theme="<%= leftButton.swatch %>"
     <% for(var attr in leftButton.data) { %> data-<%= attr %>="<%= leftButton.data[attr] %>" <%}%>
@@ -13,7 +13,7 @@
 <% if(rightButton) { %>
     <a href="<%= rightButton.link %>"
         <% if(rightButton.id) { %> id="<%= rightButton.id %>" <%}%>
-        class="ui-btn-right" 
+        <% if(rightButton.class) { %> class="<%= rightButton.class %>" <%}%>
         data-icon="<%= rightButton.icon %>" 
         data-theme="<%= rightButton.swatch %>"
         <% for(var attr in rightButton.data) { %> data-<%= attr %>="<%= rightButton.data[attr] %>" <%}%>

@@ -3,10 +3,11 @@ define([
   
   "modules/project/model",
   "modules/project/collection",
-  "modules/project/views"
+  "modules/project/views",
+  "modules/review/main"
 ],
 
-function(app, Model, Collection, Views) {
+function(app, Model, Collection, Views, Review) {
   // Create a new module.
   var Project = app.module();
   
@@ -77,20 +78,27 @@ function(app, Model, Collection, Views) {
   
   
   Project.show = function(id) {
-    var project = app.Projects.get(id);
+    var project = new Project.Model({id: id});
+    project.fetch();
         
     var header = new app.helpers.Header
       .create(project.get('name'))
       .addBack()
     ;
-    
+        
     return new Backbone.Layout({
       template: "layout/page",
       
       views: {
         '#header': header,
-        '#content': new Project.Views.Show({
-          model: project
+        '#content': new Project.Views.Details({
+          model: project,
+          
+          views: {
+            '#reviews': new Review.Views.List({
+              collection: project.reviews
+            })
+          }
         })
       }
     });

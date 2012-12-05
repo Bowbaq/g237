@@ -1,18 +1,26 @@
-define(["app", "backbone"], function(app, Backbone) {
+define(["app", "backbone", "modules/review/main"], function(app, Backbone, Review) {
   // Project model
   var Model = Backbone.Model.extend({
     idAttribute: "_id",
+    
+    urlRoot: app.api_root + 'api/projects',
     
     defaults: {
       name: '',
       description: '',
       link: '',
       
-      viewed: 0,
-      reviewed: 0,
+      reviews: [],
       
       created_at: '',
       updated_at: ''
+    },
+    
+    initialize: function(){
+      var self = this;
+      this.reviews = new Review.Collection({
+        project: self
+      });
     }
   });
   

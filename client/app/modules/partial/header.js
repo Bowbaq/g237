@@ -26,15 +26,7 @@ function(app) {
       return this.model.toJSON();
     },
     
-    beforeRender: function() {
-      this.$el.attr('data-role', 'header').attr('data-id', 'header').attr('data-position', 'fixed');
-    },
-    
     add: function(button) {
-      if(!button.swatch) {
-        button.swatch = 'a';
-      }
-      
       if(!button.data) {
         button.data = {};
       }
@@ -50,15 +42,10 @@ function(app) {
     
     addBack: function() {
       return this.add({
+        class: 'back-button',
         side: 'left',
         text: 'Back',
-        link: '#',
-        icon: 'delete',
-        data: {
-          // rel: 'back',
-          // back: 'true',
-          // direction: 'reverse'
-        }
+        link: '#'
       });
     }
   });

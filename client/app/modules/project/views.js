@@ -3,7 +3,7 @@ define(["app", "backbone"], function(app, Backbone) {
   
   // Item view
   Views.Item = Backbone.Layout.extend({
-    template: "project/item",
+    template: "project/gallery-item",
     tagName: 'li',
 
     serialize: function() {
@@ -16,33 +16,23 @@ define(["app", "backbone"], function(app, Backbone) {
     tagName: 'ul',
 
     beforeRender: function() {
-      this.$el.attr('data-role', 'listview');
-
       this.collection.each(function(project) {
         this.insertView(new Views.Item({
           model: project
         }));
       }, this);
     },
-    
-    afterRender: function() {
-      $('[data-role=]')
-    },
 
     initialize: function() {
       this.collection.on("reset", function test() {
-        console.log('reset event');
         this.render();
       }, this);
       
       this.collection.on("add", function(project) {
-        console.log('add event');
         this.insertView(new Views.Item({
           model: project
         })).render();
       }, this);
-      // 
-      // // this.collection.fetch();
     }
   });
   
@@ -56,19 +46,19 @@ define(["app", "backbone"], function(app, Backbone) {
     },
 
     orderByReviews: function() {
-      $('#updated').removeClass('ui-btn-active');
-      $('#reviewed').addClass('ui-btn-active');
+      $('#updated').removeClass('active');
+      $('#reviewed').addClass('active');
     },
 
     orderByLastUpdated: function() {
-      $('#reviewed').removeClass('ui-btn-active');
-      $('#updated').addClass('ui-btn-active');
+      $('#reviewed').removeClass('active');
+      $('#updated').addClass('active');
     }
   });
   
   // Creation form
   Views.Form = Backbone.Layout.extend({
-    template: "project/form",
+    template: "project/create-form",
 
     events: {
       'submit #create-project-form' : 'create'
@@ -101,12 +91,23 @@ define(["app", "backbone"], function(app, Backbone) {
     }
   });
   
-  Views.Show = Backbone.Layout.extend({
+  Views.Details = Backbone.Layout.extend({
     template: "project/show",
     
     serialize: function() {
-      console.log(this.model.toJSON());
       return this.model.toJSON();
+    },
+    
+    initialize: function() {
+      this.model.on('change', this.pullReviews);
+      // 
+      // this._form = $('#review-create')
+      // this._form.on('submit', this.onSubmitReview)
+    },
+    
+    pullReviews: function(){
+      console.log('change');
+      this.reviews.fetch();
     }
   });
   
