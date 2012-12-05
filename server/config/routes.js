@@ -5,13 +5,8 @@ exports.routes = function (map) {
     api.post('authenticate', 'auth#authenticate');
     api.get('logout', 'auth#logout');
     
-    api.resources('projects', function(projects){
-      projects.ressource('reviews');
+    api.resources('projects', function(project){
+      project.resources('reviews');
     });
   });
-
-  // Generic routes. Add all your routes below this line
-  // feel free to remove generic routes
-  map.all(':controller/:action');
-  map.all(':controller/:action/:id');
 };

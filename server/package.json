@@ -4,6 +4,7 @@
         "ejs": "*", 
         "ejs-ext": "< 0.1.2", 
         "express": "~2.x", 
+        "jugglingdb": ">= 0.1.0", 
         "mongoose": "3.4.0", 
         "passport": "0.1.15", 
         "passport-local": "0.1.6", 
@@ -16,13 +17,13 @@
         "sinon": "*"
     }, 
     "engines": {
-        "node": "0.8.x",
+        "node": "0.8.x", 
         "npm": "1.1.x"
-    },
+    }, 
     "main": "server.js", 
     "name": "g237-server", 
     "scripts": {
-        "start": "node server.js",
+        "start": "node server.js", 
         "test": "nodeunit test/*/*"
     }, 
     "version": "0.0.1"

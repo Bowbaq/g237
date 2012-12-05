@@ -12,7 +12,7 @@ var ReviewSchema = new Mongoose.Schema({
   lo_vote: { type: Number, default: 0 }
 });
 
-var Review = Mongoose.Model('Review', ReviewSchema);
+var Review = Mongoose.model('Review', ReviewSchema);
 Review.modelName = 'Review';
 
 module.exports = Review;

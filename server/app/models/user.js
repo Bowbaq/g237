@@ -1,7 +1,9 @@
-var mongoose = require('mongoose');
+var Mongoose = require('mongoose');
+var ObjectId = Mongoose.Schema.Types.ObjectId;
+
 var persister = require('passport-local-mongoose');
     
-var UserSchema = new mongoose.Schema({
+var UserSchema = new Mongoose.Schema({
   name: String,
   semester: String,
   
@@ -14,7 +16,7 @@ var UserSchema = new mongoose.Schema({
     
 UserSchema.plugin(persister); // Adds username, hash, salt
 
-var User = mongoose.model('User', UserSchema);
+var User = Mongoose.model('User', UserSchema);
 User.modelName = 'User'; // this is for some features inside railway (helpers, etc)
 
 module.exports = User;

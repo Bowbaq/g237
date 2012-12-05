@@ -1,17 +1,17 @@
 {
     "development": {
         "database": "g237-dev", 
-        "driver": "mongodb", 
+        "driver": "mongoose", 
         "host": "localhost"
     }, 
     "production": {
         "database": "g237-production", 
-        "driver": "mongodb", 
+        "driver": "mongoose", 
         "host": "localhost"
     }, 
     "test": {
         "database": "g237-test", 
-        "driver": "mongodb", 
+        "driver": "mongoose", 
         "host": "localhost"
     }
 }
