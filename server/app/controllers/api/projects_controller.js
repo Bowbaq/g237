@@ -11,15 +11,13 @@ action(function index(){
 action(function show(){
   Project.findById(req.params.id, function(err, project) {
     if (!err) {
-      return res.send(project);
+      res.send(project);
     }
   });
 });
 
 action(function create(){
-  var project = new Project({
-    name: req.body.name
-  });
+  var project = new Project(req.body);
   
   project.save(function(err) {
     if (!err) {

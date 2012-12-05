@@ -5,7 +5,9 @@ exports.routes = function (map) {
     api.post('authenticate', 'auth#authenticate');
     api.get('logout', 'auth#logout');
     
-    api.resources('projects');
+    api.resources('projects', function(projects){
+      projects.ressource('reviews');
+    });
   });
 
   // Generic routes. Add all your routes below this line
