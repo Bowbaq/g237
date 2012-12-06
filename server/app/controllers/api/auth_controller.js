@@ -7,31 +7,26 @@ layout(false);
 action(function authenticate() {
   passport.authenticate('local', function(err, user, info) {
     if (err) {
-      res.status(401).send({
-        msg: "An exception occured"
-      });
-      return;
+      return send(401);
     }
     
     if (!user) {
-      res.status(401).send({
-        msg: "Unauthorized user"
-      });
-      return; 
+      return send(401);
     }
     
     // Everything is fine, log the user in
     req.login(user, function(err) {
       if (err) {
-        res.status(401).send({
-          msg: "Unable to establish session"
-        });
-        return;
+        return send(401);
       }
       
-      res.status(200).send({
-        id: user.id,
-        username: user.username
+      User.populate(user, function(err, user) {
+        if(err) {
+          req.logout();
+          send(401);
+        } else {
+          send(user);
+        }
       });
     });
   })(req, res, next);
@@ -39,5 +34,5 @@ action(function authenticate() {
 
 action(function logout() {
   req.logout();
-  res.status(200).send();
+  send(200);
 });

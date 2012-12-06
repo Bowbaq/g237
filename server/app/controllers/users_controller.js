@@ -2,6 +2,7 @@ load('application');
 
 layout('application');
 
+//before(use('requireAdmin'));
 before(loadUser, {only: ['show', 'edit', 'update', 'destroy']});
 
 action('new', function () {

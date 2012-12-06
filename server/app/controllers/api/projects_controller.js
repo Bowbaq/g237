@@ -1,29 +1,64 @@
+var _ = require('lodash');
+
 load('application');
 
 layout(false);
 
 action(function index(){
-  Project.find(function (err, projects) {
-    res.send(projects);
+  Project.find().populate('join_requests').populate('team').populate('reviews')
+  .exec(function (err, projects) {
+    send(_.map(projects, Project.sanitize));
   });
 });
 
 action(function show(){
-  Project.findById(req.params.id, function(err, project) {
+  Project.findById(params.id, function(err, project) {
     if (!err) {
-      res.send(project);
+      Project.populate(project, function(err, project) {
+        if(err) {
+          send(404);
+        } else {
+          send(project);
+        }
+      });
+    } else {
+      send(404);
     }
   });
 });
 
 action(function create(){
+  req.body.updated_at = Date.now();
   var project = new Project(req.body);
   
   project.save(function(err) {
     if (!err) {
-      return console.log('Created ', project);
+      Project.populate(project, function(err, project) {
+        if(err) {
+          send(404);
+        } else {
+          send(project);
+        }
+      });
+    } else {
+      send(404);
     }
   });
-  
-  res.send(project);
+});
+
+action(function update(){
+  req.body.updated_at = Date.now();
+  Project.findByIdAndUpdate(params.id, req.body, function(err, project) {
+    if(!err) {
+      Project.populate(project, function(err, project) {
+        if(err) {
+          send(404);
+        } else {
+          send(project);
+        }
+      });
+    } else {
+      send(404);
+    }
+  }.bind(this));
 });
