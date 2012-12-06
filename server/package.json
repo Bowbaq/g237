@@ -5,6 +5,7 @@
         "ejs-ext": "< 0.1.2", 
         "express": "~2.x", 
         "jugglingdb": ">= 0.1.0", 
+        "lodash": "1.0.0-rc.2", 
         "mongoose": "3.4.0", 
         "passport": "0.1.15", 
         "passport-local": "0.1.6", 
