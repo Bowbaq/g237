@@ -1,6 +1,7 @@
 var Mongoose = require('mongoose');
-
 var ObjectId = Mongoose.Schema.Types.ObjectId;
+
+var User = require('./user');
 
 var ReviewSchema = new Mongoose.Schema({
   author: { type: ObjectId, ref: 'User' }, 
@@ -14,5 +15,13 @@ var ReviewSchema = new Mongoose.Schema({
 
 var Review = Mongoose.model('Review', ReviewSchema);
 Review.modelName = 'Review';
+
+Review.sanitize = function sanitize(review) {
+  var author = User.sanitize(author);
+  review = review.toObject();
+  review.author = author;
+  
+  return review;
+}
 
 module.exports = Review;
