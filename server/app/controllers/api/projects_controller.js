@@ -5,60 +5,27 @@ load('application');
 layout(false);
 
 action(function index(){
-  Project.find().populate('join_requests').populate('team').populate('reviews')
-  .exec(function (err, projects) {
-    send(_.map(projects, Project.sanitize));
-  });
+  Project.helpers.findAll(sendDataOrNotFound);
 });
 
 action(function show(){
-  Project.findById(params.id, function(err, project) {
-    if (!err) {
-      Project.populate(project, function(err, project) {
-        if(err) {
-          send(404);
-        } else {
-          send(project);
-        }
-      });
-    } else {
-      send(404);
-    }
-  });
+  Project.helpers.find(params.id, sendDataOrNotFound);
 });
 
 action(function create(){
   req.body.updated_at = Date.now();
-  var project = new Project(req.body);
-  
-  project.save(function(err) {
-    if (!err) {
-      Project.populate(project, function(err, project) {
-        if(err) {
-          send(404);
-        } else {
-          send(project);
-        }
-      });
-    } else {
-      send(404);
-    }
-  });
+  Project.helpers.create(req.body, sendDataOrNotFound);
 });
 
 action(function update(){
   req.body.updated_at = Date.now();
-  Project.findByIdAndUpdate(params.id, req.body, function(err, project) {
-    if(!err) {
-      Project.populate(project, function(err, project) {
-        if(err) {
-          send(404);
-        } else {
-          send(project);
-        }
-      });
-    } else {
-      send(404);
-    }
-  }.bind(this));
+  Project.helpers.update(params.id, req.body, sendDataOrNotFound);
 });
+
+function sendDataOrNotFound(err, user) {
+  if (err) {
+    send(404);
+  } else {
+    send(user);
+  }
+}
