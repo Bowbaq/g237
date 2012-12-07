@@ -13,8 +13,8 @@ var ProjectSchema = new Mongoose.Schema({
   },
   version: String,
   
-  team: [{ type: ObjectId, ref: 'Project' }],
-  join_requests: [{ type: ObjectId, ref: 'Project' }],
+  team: [{ type: ObjectId, ref: 'User' }],
+  join_requests: [{ type: ObjectId, ref: 'User' }],
   
   reviews: [{ type: ObjectId, ref: 'Review' }],
   

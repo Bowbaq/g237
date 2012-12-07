@@ -7,61 +7,49 @@ layout(false);
 before(loadModels);
 
 action(function request(){
-  if(!(_.filter(this.project.join_requests, userEquals.bind(this)).length > 0 || _.filter(this.project.team, userEquals.bind(this)).length > 0)) {
-    this.project.join_requests.push(this.user._id);
-    this.user.join_requests.push(this.project._id);
+  if(!userInTeam(this.project, this.user) && !userInRequests(this.project, this.user)) {
+    this.project.join_requests.push(this.user);
+    this.user.join_requests.push(this.project);
     
-    this.project.save(function(err, project){
+    this.user.save(function(err) {
       if(err) {
         send(404);
       } else {
-        this.user.save(function(err, user) {
+        this.project.save(function(err){
           if(err) {
             send(404);
           } else {
-            Project.populate(project, function(err, project) {
-              if(err) {
-                send(404);
-              } else {
-                send(project);
-              }
-            });
+            Project.helpers.find(this.project.id, sendDataOrNotFound);
           }
-        });
+        }.bind(this));
       }
     }.bind(this));
   } else {
-    send(404); 
+    send(this.project);
   }
 });
 
 action(function grant(){
-  if(_.filter(this.project.join_requests, userEquals.bind(this)).length > 0) {
-    // Remove request
-    this.project.join_requests = _.reject(this.project.join_requests, userEquals.bind(this));
-    this.user.join_requests = _.reject(this.user.join_requests, projectEquals.bind(this));
+  if(userInRequests(this.project, this.user)) {
+    // Remove requests
+    this.project.join_requests = _.reject(this.project.join_requests, userEquals(this.user));
+    this.user.join_requests = _.reject(this.user.join_requests, projectEquals(this.project));
     
     // Link models
-    this.project.team.push(this.user._id);
-    this.user.projects.push(this.project._id);
-
-    this.project.save(function(err, project){
+    this.project.team.push(this.user);
+    this.user.projects.push(this.project);
+    
+    this.user.save(function(err) {
       if(err) {
         send(404);
       } else {
-        this.user.save(function(err, user) {
+        this.project.save(function(err){
           if(err) {
             send(404);
           } else {
-            Project.populate(project, function(err, project) {
-              if(err) {
-                send(404);
-              } else {
-                send(project);
-              }
-            });
+            Project.helpers.find(this.project.id, sendDataOrNotFound);
           }
-        });
+        }.bind(this));
       }
     }.bind(this));
   } else {
@@ -70,27 +58,22 @@ action(function grant(){
 });
 
 action(function deny(){
-  if(_.filter(this.project.join_requests, userEquals.bind(this)).length > 0) {
-    this.project.join_requests = _.reject(this.project.join_requests, userEquals.bind(this));
-    this.user.join_requests = _.reject(this.user.join_requests, projectEquals.bind(this));
-
-    this.project.save(function(err, project){
+  if(userInRequests(this.project, this.user)) {
+    // Remove requests
+    this.project.join_requests = _.reject(this.project.join_requests, userEquals(this.user));
+    this.user.join_requests = _.reject(this.user.join_requests, projectEquals(this.project));
+    
+    this.user.save(function(err) {
       if(err) {
         send(404);
       } else {
-        this.user.save(function(err, user) {
+        this.project.save(function(err){
           if(err) {
             send(404);
           } else {
-            Project.populate(project, function(err, project) {
-              if(err) {
-                send(404);
-              } else {
-                send(project);
-              }
-            });
+            Project.helpers.find(this.project.id, sendDataOrNotFound);
           }
-        });
+        }.bind(this));
       }
     }.bind(this));
   } else {
@@ -99,28 +82,47 @@ action(function deny(){
 });
 
 function loadModels() {
-  Project.findById(params.project_id, function(err, project) {
-    if(err || !project) {
+  Project.helpers.find(params.project_id, function(err, project) {
+    if(err) {
       send(404);
     } else {
       this.project = project;
-
-      User.findById(params['user_id'], function(err, user) {
-        if(err || !user) {
+      User.helpers.find(params.user_id, function(err, user) {
+        if(err) {
           send(404);
         } else {
           this.user = user;
           next();
         }
-      }.bind(this));
+      }.bind(this), true);
     }
-  }.bind(this));
+  }.bind(this), true);
 }
 
-function userEquals(id) {
-  return id.equals(this.user._id);
+function userInTeam(project, user) {
+  return _.filter(project.team, userEquals(user)).length > 0;
 }
 
-function projectEquals(id) {
-  return id.equals(this.project._id);
+function userInRequests(project, user) {
+  return _.filter(project.join_requests, userEquals(user)).length > 0;
+}
+
+function userEquals(user_a) {
+  return function(user_b) {
+    return user_a.equals(user_b);
+  };
+}
+
+function projectEquals(project_a) {
+  return function(project_b) {
+    return project_a.equals(project_b);
+  };
+}
+
+function sendDataOrNotFound(err, data) {
+  if(err) {
+    send(404);
+  } else {
+    send(data);
+  }
 }
