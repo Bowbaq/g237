@@ -5,33 +5,32 @@ layout(false);
 before(loadProject);
 
 action(function index(){
-  Project.populate(this.project, function(err, project) {
-    if(err) {
-      send(404);
-    } else {
-      send(project.reviews);
-    }
-  });
+  Review.helpers.findAll(this.project, sendDataOrNotFound);
 });
 
 action(function create(){
   req.body.posted_at = Date.now();
-  var review = new Review(req.body);
-  console.log(review);
-});
-
-action(function update(){
-  console.log('Not implemented');
+  Review.helpers.create(this.project, req.body, sendDataOrNotFound);
 });
 
 function loadProject() {
-  Project.findById(params.project_id, function(err, project) {
-    if (!err) {
+  Project.helpers.find(params.project_id, function(err, project) {
+    if(err) {
+      send(404);
+    } else {
       this.project = project;
       next();
-    } else {
-      send(404);
     }
-  });
+  }.bind(this), true);
 }
+
+function sendDataOrNotFound(err, data) {
+  if(err) {
+    send(404);
+  } else {
+    send(data);
+  }
+}
+
+
 

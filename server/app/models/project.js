@@ -36,13 +36,17 @@ Project.helpers = _.extend(Project.helpers || {}, {
     });
   },
   
-  find: function(id, callback) {
+  find: function(id, callback, raw) {
     Project.findById(id).populate('join_requests').populate('team').populate('reviews')
     .exec(function(err, project) {
       if(err) {
         callback(err, null);
       } else {
-        callback(null, Project.helpers.sanitize(project));
+        if(raw) {
+          callback(null, project);
+        } else {
+          callback(null, Project.helpers.sanitize(project));
+        }
       }
     })
   },

@@ -34,13 +34,17 @@ User.helpers = _.extend(User.helpers || {}, {
     });
   },
   
-  find: function(id, callback) {
+  find: function(id, callback, raw) {
     User.findById(id).populate('projects').populate('join_requests').populate('reviews')
     .exec(function(err, user) {
       if(err) {
         callback(err, null);
       } else {
-        callback(null, User.helpers.sanitize(user));
+        if(raw) {
+          callback(null, user);
+        } else {
+          callback(null, User.helpers.sanitize(user)); 
+        }
       }
     })
   },

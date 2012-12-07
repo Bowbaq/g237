@@ -28,11 +28,11 @@ action(function update(){
   User.helpers.update(params.id, req.body, sendDataOrNotFound);
 });
 
-function sendDataOrNotFound(err, user) {
-  if (err) {
+function sendDataOrNotFound(err, data) {
+  if(err) {
     send(404);
   } else {
-    send(user);
+    send(data);
   }
 }
 
