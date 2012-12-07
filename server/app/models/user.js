@@ -22,22 +22,68 @@ UserSchema.plugin(persister); // Adds username, hash, salt
 var User = Mongoose.model('User', UserSchema);
 User.modelName = 'User'; // this is for some features inside railway (helpers, etc)
 
-User.sanitize = function sanitize(user) {
-  return _.omit(user.toObject(), 'hash', 'salt');
-}
-
-User.populate = function populate(user, fn) {
-  User.findById(user._id)
-    .populate('projects')
-    .populate('join_requests')
-    .populate('reviews')
-    .exec(function(err, project) {
+User.helpers = _.extend(User.helpers || {}, {
+  findAll: function findAll(callback) {
+    User.find().populate('projects').populate('join_requests').populate('reviews')
+    .exec(function (err, users) {
       if(err) {
-        fn(err, null);
+        callback(err, null);
       } else {
-        fn(null, User.sanitize(user));
+        callback(null, _.map(users, User.helpers.sanitize));
       }
     });
-};
+  },
+  
+  find: function(id, callback) {
+    User.findById(id).populate('projects').populate('join_requests').populate('reviews')
+    .exec(function(err, user) {
+      if(err) {
+        callback(err, null);
+      } else {
+        callback(null, User.helpers.sanitize(user));
+      }
+    })
+  },
+  
+  create: function(data, callback) {
+    User.findOne({username : data.username }, function(err, existingUser) {
+      if (err || existingUser) {
+        if (!err) {
+          err = 'User already exists';
+        }
+        callback(err, null)
+      } else {
+        var user = new User(data);
+        user.setPassword(data.password, function(err) {
+          if(err) {
+            callback(err, null)
+          } else {
+            user.save(function(err, user) {
+              if(err) {
+                callback(err, null)
+              } else {
+                User.helpers.find(user.id, callback);
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+  
+  update: function(id, data, callback) {
+    User.findByIdAndUpdate(id, data, function(err, project) {
+      if(err) {
+        callback(err, null);
+      } else {
+        User.helpers.find(id, callback);
+      }
+    });
+  },
+  
+  sanitize: function sanitize(user) {
+    return _.omit(user.toObject(), 'hash', 'salt');
+  }
+});
 
 module.exports = User;
