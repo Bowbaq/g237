@@ -1,0 +1,8 @@
+<div class="vote">
+    <a class="upvote" href="/projects/<%= project %>/reviews/<%= _id %>/upvote">Up (<%= up_vote %>)</a>
+    <a class="lovote" href="/projects/<%= project %>/reviews/<%= _id %>/lovote">Down (<%= lo_vote %>)</a>
+</div>
+<div class="review-body">
+    <%= body %>
+</div>
+<p>At: <%= posted_at %> By: <%= author && author.username %> </p>

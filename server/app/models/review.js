@@ -69,6 +69,16 @@ Review.helpers = _.extend(Review.helpers || {}, {
     }, true);
   },
   
+  update: function update(id, data, callback) {
+    Review.findByIdAndUpdate(id, _.pick(data, 'up_vote', 'lo_vote'), function(err, project) {
+      if(err) {
+        callback(err, null);
+      } else {
+        Project.helpers.find(id, callback);
+      }
+    });
+  },
+  
   sanitize: function sanitize(review) {
     var author = User.helpers.sanitize(review.author);
     review = review.toObject();

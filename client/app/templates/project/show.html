@@ -1,11 +1,14 @@
+<h1><%= name %></h1>
+
 <h2>Description:</h2>
 <p><%= description %></p>
 
-<h2>Link:</h2>
-<p><%= link %></p>
+<h2>Links:</h2>
+<a href="<%= link.ios || '#' %>">iOS</a>
+<a href="<%= link.android || '#' %>">Android</a>
 
-<h2>Created at:</h2>
-<p><%= created_at %></p>
+<h2>Version:</h2>
+<p><%= version %></p>
 
 <h2>Updated at:</h2>
 <p><%= updated_at %></p>

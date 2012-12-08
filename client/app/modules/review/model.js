@@ -4,14 +4,20 @@ define(["app", "backbone"], function(app, Backbone) {
     idAttribute: "_id",
     
     defaults: {
-      project: null,
+      _id: '',
       author: null,
+      project: '',
+      
       body: '',
       
-      posted_at: '',
+      posted_at: new Date(),
       
-      up: 0,
-      down: 0
+      up_vote: 0,
+      lo_vote: 0
+    },
+    
+    url: function() {
+      return app.api_root + 'api/projects/' + this.get('project').id + '/reviews';
     }
   });
   

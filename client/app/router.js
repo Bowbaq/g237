@@ -40,7 +40,12 @@ function(app, Project) {
     },
     
     showProject: function(id) {
-      this.changePage(Project.show(id));
+      var self = this;
+      app.Projects.fetch({
+        success: function(){
+          self.changePage(Project.show(id));
+        }
+      });
     },
     
     login: function() {

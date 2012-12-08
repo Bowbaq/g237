@@ -100,13 +100,12 @@ define(["app", "backbone"], function(app, Backbone) {
     
     initialize: function() {
       this.model.on('change', this.pullReviews);
-      // 
+      // this.model.on('all', this.render, this);
       // this._form = $('#review-create')
       // this._form.on('submit', this.onSubmitReview)
     },
     
     pullReviews: function(){
-      console.log('change');
       this.reviews.fetch();
     }
   });

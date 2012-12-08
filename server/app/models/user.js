@@ -13,6 +13,7 @@ var UserSchema = new Mongoose.Schema({
   join_requests: [{ type: ObjectId, ref: 'Project' }],
   
   reviews: [{ type: ObjectId, ref: 'Review' }],
+  voted: [String],
   
   role: { type: String, default: 'USER' }
 });

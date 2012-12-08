@@ -3,24 +3,21 @@ define(["app", "backbone", "modules/review/main"], function(app, Backbone, Revie
   var Model = Backbone.Model.extend({
     idAttribute: "_id",
     
-    urlRoot: app.api_root + 'api/projects',
-    
     defaults: {
       name: '',
       description: '',
-      link: '',
+      link: {
+        ios: '',
+        android: ''
+      },
+      version: '',
+      
+      team: [],
+      join_requests: [],
       
       reviews: [],
       
-      created_at: '',
       updated_at: ''
-    },
-    
-    initialize: function(){
-      var self = this;
-      this.reviews = new Review.Collection({
-        project: self
-      });
     }
   });
   

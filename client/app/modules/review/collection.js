@@ -3,13 +3,12 @@ define(["app", "backbone", "modules/review/model"], function(app, Backbone, Mode
   var Collection = Backbone.Collection.extend({
     model: Model,
     
-    url: function() {
-      console.log(this.project);
-      return app.api_root + 'api/projects/' + this.project.get('id') + '/reviews';
+    initialize: function(options) {
+      this.project = options.project;
     },
     
-    initialize: function(data){
-      this.project = data.project;
+    url: function() {
+      return app.api_root + 'api/projects/' + this.project.id + '/reviews';
     }
   });
   

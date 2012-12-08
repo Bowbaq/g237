@@ -78,25 +78,17 @@ function(app, Model, Collection, Views, Review) {
   
   
   Project.show = function(id) {
-    var project = new Project.Model({id: id});
-    project.fetch();
-        
-    var header = new app.helpers.Header
-      .create(project.get('name'))
-      .addBack()
-    ;
-        
+    var project = app.Projects.get(id);
     return new Backbone.Layout({
       template: "layout/page",
       
       views: {
-        '#header': header,
         '#content': new Project.Views.Details({
           model: project,
           
           views: {
             '#reviews': new Review.Views.List({
-              collection: project.reviews
+              collection: new Review.Collection({project: project})
             })
           }
         })
