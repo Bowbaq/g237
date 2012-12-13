@@ -42,7 +42,7 @@ action(function create() {
                 });
               } else {
                 flash('info', 'User created');
-                redirect(path_to.users());
+                redirect(path_to.admin_users());
               }
             });
           }
@@ -74,7 +74,7 @@ action(function update() {
   User.findByIdAndUpdate(this.user.id, body.User, function(err) {
     if (!err) {
       flash('info', 'User updated');
-      redirect(path_to.user(this.user));
+      redirect(path_to.admin_user(this.user));
     } else {
       flash('error', 'User can not be updated');
       this.title = 'Edit user details';
@@ -90,14 +90,14 @@ action(function destroy() {
     } else {
       flash('info', 'User successfully removed');
     }
-    send("'" + path_to.users() + "'");
+    send("'" + path_to.admin_users() + "'");
   });
 });
 
 function loadUser() {
   User.findById(params.id, function (err, user) {
     if (err || !user) {
-      redirect(path_to.users());
+      redirect(path_to.admin_users());
     } else {
       this.user = user;
       next();
