@@ -1,0 +1,18 @@
+<% if(header.get('back')) {%>
+    <a href="#" class="btn btn-inverse pull-left back" data-bypass="true">
+        <i class="icon-chevron-left icon-white"></i>
+        Back
+    </a>
+<% } %>
+
+<% if( header.get('title').length > 0) { %>
+    <h4><%= header.get('title') %></h4>
+<% } %>
+
+<% if( header.get('right').link.length > 0) { %>
+    <a href="<%= header.get('right').link %>" 
+       class="<%= header.get('right').className %>">
+       <i class="<%= header.get('right').iconName %>"></i>
+       <%= header.get('right').text %>
+    </a>
+<% } %>

@@ -1,0 +1,42 @@
+<h3>Description:</h3>
+<p class="project-description"><%= project.get('description') %></p>
+<p><strong>Version:</strong> <%= project.get('version') %></p>
+<p><strong>Updated at:</strong> <%= moment(new Date(project.get('updated_at'))).fromNow().toString("mm:dd") %></p>
+
+<h3>Links:</h3>
+<div class="project-link">
+    <ul>
+        <li><a href="<%= project.get('link').ios || '#' %>">iOs</a></li>
+        <li><a href="<%= project.get('link').android || '#' %>">Android</a></li>
+    </ul>
+</div>
+
+<h3>Team:</h3>
+<ul class="nav nav-tabs nav-stacked">
+    <% _.forEach(project.get('team'), function(member) { %>
+        <li><a href="user/<%= member._id %>"><%= member.username %></a></li>
+    <% }) %>
+</ul>
+
+<% if(show_join_requests) { %>
+<h3>Join requests:</h3>
+<table class="table table-striped">
+    <tr>
+        <th>User</th>
+        <th>Accept</th>
+        <th>Deny</th>
+    </tr>
+    <% _.forEach(project.get('join_requests'), function(user){ %>
+        <tr>
+            <td><li><a href="user/<%= user._id %>"><%= user.username %></a></li></td>
+            <td></td>
+            <td></td>
+        </tr>
+    <% });%>
+</table>
+<% } %>
+
+<h3>Reviews:</h3>
+<div id="reviews">
+    <!-- Reviews go here -->
+</div>

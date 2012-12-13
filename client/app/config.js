@@ -3,11 +3,12 @@ require.config({
 
   // Initialize the application with the main application file and the JamJS
   // generated configuration file.
-  deps: ["../vendor/jam/require.config", "patch", "main"],
+  deps: ["../vendor/jam/require.config", "patch", "moment", "main"],
 
   paths: {
     patch: "../vendor/js/patch",
-    plugins: "../vendor/js/plugins"
+    plugins: "../vendor/js/plugins",
+    moment: "../vendor/js/libs/moment"
   },
 
   shim: {
@@ -16,5 +17,4 @@ require.config({
     // Backbone-filter depends on Backbone.
     "plugins/backbone-filter": ["backbone"]
   }
-
 });
