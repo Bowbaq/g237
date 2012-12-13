@@ -52,7 +52,8 @@ Project.helpers = _.extend(Project.helpers || {}, {
   },
   
   create: function(data, callback) {
-    delete data.team;
+    // delete data.team;
+    console.log(data.team);
     delete data.join_requests;
     delete data.reviews;
     

@@ -74,9 +74,14 @@ define(["app", "modules/review" ], function(app, Review) {
       var reviewList = new Review.Views.List({
         collection: this.model.reviews
       });
+      
+      var reviewForm = new Review.Views.NewForm({
+        collection: this.model.reviews
+      });
             
       this.setViews({
-        '#reviews': reviewList
+        '#reviews': reviewList,
+        '#add-review': reviewForm
       });
     },
     
@@ -139,7 +144,7 @@ define(["app", "modules/review" ], function(app, Review) {
           android: this.$el.find('#link-android').val()
         },
         
-        team: [ this.user.id ],
+        team: [ this.user._id ],
         
         updated_at: new Date()
       };

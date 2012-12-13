@@ -17,10 +17,10 @@ The goal of this app is to provide a place for the students of 15-237 to post th
     - Browse the list of projects
         - Sort by least reviewed, most recently updated
     - Add a project
+    - Add reviews to a project
     - Request to join a project
     - Edit a project (when you're a team member)
     - Deny a join request (when you're a team member)
-    - Add reviews to a project
 - Reviews
     - Browse reviews (project detail page, user detail page)
     - Vote other people reviews up or down, placing most upvoted reviews to the top

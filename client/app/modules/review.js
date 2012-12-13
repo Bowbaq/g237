@@ -91,6 +91,11 @@ function(app) {
     }
   });
   
+  // Create form
+  Review.Views.NewForm = Backbone.View.extend({
+    template: "review/new"
+  });
+  
   // Return the module for AMD compliance.
   return Review;
 

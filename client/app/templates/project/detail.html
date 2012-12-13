@@ -15,7 +15,7 @@
 <ul class="nav nav-tabs nav-stacked">
     <% _.forEach(project.get('team'), function(member) { %>
         <li><a href="user/<%= member._id %>"><%= member.username %></a></li>
-    <% }) %>
+    <% }); %>
 </ul>
 
 <% if(show_join_requests) { %>
@@ -32,11 +32,16 @@
             <td></td>
             <td></td>
         </tr>
-    <% });%>
+    <% }); %>
 </table>
 <% } %>
 
 <h3>Reviews:</h3>
 <div id="reviews">
     <!-- Reviews go here -->
+</div>
+
+<h3>Post a review:</h3>
+<div id="add-review">
+    <!-- Form goes here -->
 </div>
