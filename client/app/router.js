@@ -4,30 +4,78 @@ define([
   
   // Modules
   "modules/layout",
-  "modules/project"
+  "modules/auth",
+  "modules/project",
+  
+  // Plugins
+  "plugins/backbone-filter"
 ],
 
-function(app, Layout, Project) {
+function(app, Layout, Auth, Project) {
 
   // Defining the application router, you can attach sub routers here.
   var Router = Backbone.Router.extend({
     initialize: function() {
+      Auth.init();
+      
       var collections = {
+        user: Auth.user(),
         projects: new Project.Collection()
       };
       
       _.extend(this, collections);
     },
     
+    before: {
+      "^(?!login$).*": function() {
+        return this.checkAuthentication();
+      }
+    },
     
     routes: {
+      // Authentication routes
+      "login": "login",
+      "logout": "logout",
+      
+      // Project routes
       "":               "showGallery",
       "project/:id":    "showProject"
     },
+    
+    login: function(){
+      if(Auth.authenticated()) {
+        console.log('Redirecting to the index page');
+        this.navigate('/', {trigger: true});
+        return;
+      }
+      
+      app.useLayout('layout/page').setViews({
+        '.header': new Layout.Views.Header({
+          model: new Layout.Models.Header({ title: "Authenticate" })
+        }),
+        '.content': new Auth.Views.LoginForm()
+      }).render();
+    },
+    
+    logout: function() {
+      if(Auth.authenticated()) {
+        Auth.logout();
+        this.navigate('/login', { trigger: true });
+      }
+    },
+
+    checkAuthentication: function(){
+      if(!Auth.authenticated()) {
+        console.log('Redirecting to the login page');
+        this.navigate('/login', {trigger: true});
+        return false;
+      }
+    },
 
     showGallery: function() {
-      app.useLayout("layout/page").setViews({
-        ".header": new Layout.Views.Header({
+      console.log('Rendering index page');
+      app.useLayout('layout/page').setViews({
+        '.header': new Layout.Views.Header({
           model: new Layout.Models.Header({
             title: "Gallery",
             right: {
@@ -37,8 +85,17 @@ function(app, Layout, Project) {
             }
           })
         }),
-        ".content" : new Project.Views.List({
-          collection: this.projects
+        '.content': new Backbone.Layout({
+          template: "project/gallery",
+          
+          views: {
+            '.controls': new Project.Views.ListControls({
+              collection: this.projects
+            }),
+            '.list': new Project.Views.List({
+              collection: this.projects
+            })
+          }
         })
       }).render();
       

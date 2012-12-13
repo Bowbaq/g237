@@ -37,7 +37,11 @@ function(app, Review) {
         project_id: this.id
       });
       
-      this.reviews.fetch();
+      this.reviews.fetch({
+        success: function(){
+          this.collection.sort();
+        }.bind(this)
+      });
     }
   });
 
@@ -45,7 +49,11 @@ function(app, Review) {
   Project.Collection = Backbone.Collection.extend({
     model: Project.Model,
     
-    url: app.api_root + 'api/projects'
+    url: app.api_root + 'api/projects',
+    
+    comparator: function(first, second) {
+      return first.reviews.length > second.reviews.length;
+    }
   });
 
   // List view
@@ -64,7 +72,9 @@ function(app, Review) {
     },
     
     initialize: function() {
-      this.collection.on('reset', this.render, this);
+      this.collection.on('reset', function(){
+        this.render();
+      }, this);
     }
   });
   
@@ -80,6 +90,40 @@ function(app, Review) {
       return {
         project: this.model
       };
+    }
+  });
+  
+  Project.Views.ListControls = Backbone.View.extend({
+    template: "project/list-controls",
+    className: 'btn-group',
+    
+    onSortByLastUpdated: function() {
+      this.$el.find('button').removeClass('active');
+      this.$el.find('#sort-updated').addClass('active');
+      
+      this.collection.comparator = this.sortByLastUpdated;
+      this.collection.sort();
+    },
+    
+    sortByLastUpdated: function(first, second) {
+      return first.get('updated_at') < second.get('updated_at');
+    },
+    
+    onSortByLeastReviewed: function() {
+      this.$el.find('button').removeClass('active');
+      this.$el.find('#sort-reviewed').addClass('active');
+      
+      this.collection.comparator = this.sortByLeastReviewed;
+      this.collection.sort();
+    },
+    
+    sortByLeastReviewed: function(first, second) {
+      return first.reviews.length > second.reviews.length;
+    },
+    
+    afterRender: function() {
+      this.$el.find('#sort-reviewed').on('click', this.onSortByLeastReviewed.bind(this));
+      this.$el.find('#sort-updated').on('click', this.onSortByLastUpdated.bind(this));
     }
   });
   
