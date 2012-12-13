@@ -1,5 +1,5 @@
-<% if(header.get('back')) {%>
-    <a href="#" class="btn btn-inverse pull-left back" data-bypass="true">
+<% if(header.get('back')) { %>
+    <a href="<%= header.get('back_to') || '#'  %>" class="btn btn-inverse pull-left back" <% if(!header.get('back_to')) { %> data-bypass="true" <% }%>>
         <i class="icon-chevron-left icon-white"></i>
         Back
     </a>

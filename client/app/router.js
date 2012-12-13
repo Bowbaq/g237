@@ -5,7 +5,7 @@ define([
   // Modules
   "modules/layout",
   "modules/auth",
-  "modules/project",
+  "modules/project/project",
   
   // Plugins
   "plugins/backbone-filter"
@@ -38,13 +38,13 @@ function(app, Layout, Auth, Project) {
       "logout": "logout",
       
       // Project routes
-      "":               "showGallery",
-      "project/:id":    "showProject"
+      "":                   "showGallery",
+      "project/new":        "newProject",
+      "project/show/:id":   "showProject"
     },
     
     login: function(){
       if(Auth.authenticated()) {
-        console.log('Redirecting to the index page');
         this.navigate('/', {trigger: true});
         return;
       }
@@ -73,13 +73,12 @@ function(app, Layout, Auth, Project) {
     },
 
     showGallery: function() {
-      console.log('Rendering index page');
       app.useLayout('layout/page').setViews({
         '.header': new Layout.Views.Header({
           model: new Layout.Models.Header({
             title: "Gallery",
             right: {
-              link: 'project/add',
+              link: '/project/new',
               text: 'Add',
               iconName: 'icon-plus icon-white'
             }
@@ -110,6 +109,7 @@ function(app, Layout, Auth, Project) {
             ".header": new Layout.Views.Header({
               model: new Layout.Models.Header({
                 back: true,
+                back_to: '/',
                 title: this.projects.get(id).get('name')
               })
             }),
@@ -119,6 +119,21 @@ function(app, Layout, Auth, Project) {
           }).render();
         }.bind(this)
       });
+    },
+    
+    newProject: function(){
+      app.useLayout("layout/page").setViews({
+        ".header": new Layout.Views.Header({
+          model: new Layout.Models.Header({
+            back: true,
+            title: "New project"
+          })
+        }),
+        ".content" : new Project.Views.NewForm({
+          collection: this.projects,
+          user: this.user
+        })
+      }).render();
     }
   });
 

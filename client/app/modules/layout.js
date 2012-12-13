@@ -15,7 +15,11 @@ function(app) {
   // Default Model.
   Layout.Models.Header = Backbone.Model.extend({
     defaults: {
+      back: false,
+      back_to: '',
+      
       title: '',
+      
       right: {
         link: '',
         text: '',
@@ -48,7 +52,7 @@ function(app) {
     },
     
     afterRender: function(){
-      if (this.model.get('back')) {
+      if (this.model.get('back') && !this.model.get('back_to')) {
         this.$el.find('.back').on('click', function(e){
           e.preventDefault();
           window.history.back();

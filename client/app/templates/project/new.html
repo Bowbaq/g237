@@ -1,0 +1,40 @@
+<form id="project-create-form">
+  <legend>Generic information</legend>
+  <div class="control-group">
+    <label class="control-label" for="name">Name</label>
+    <div class="controls">
+      <input type="text" class="span12" id="name" name="name" placeholder="Awesome's project">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="description">Description</label>
+    <div class="controls">
+      <textarea class="span12" id="description" name="description" rows="5" placeholder="This is an awesome project, tell us why"></textarea>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="version">Version</label>
+    <div class="controls">
+      <input type="text" class="span12" id="version" name="version" placeholder="1.0a">
+      <span class="help-block">When you bump this later, people will get a notification</span>
+    </div>
+  </div>
+  <legend>Where to get it</legend>
+  <div class="control-group">
+    <label class="control-label" for="link-ios">Ios</label>
+    <div class="controls">
+      <input type="text" class="span12" id="link-ios" name="link-ios" placeholder="http://example.com/ios">
+    </div>
+    <label class="control-label" for="link-android">Android</label>
+    <div class="controls">
+      <input type="text" class="span12" id="link-android" name="link-android" placeholder="http://example.com/android">
+    </div>
+    <span class="help-block">Provide OS specific links to your project so others can be part of the fun</span>
+  </div>
+  <legend>Create</legend>
+  <div class="control-group">
+    <div class="controls">
+       <button type="submit" class="btn btn-block btn-primary">Create project</button>
+    </div>
+  </div>
+</form>

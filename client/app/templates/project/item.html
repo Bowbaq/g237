@@ -1,16 +1,16 @@
-<a href="<%= '/project/' + project.id %>">
+<a href="<%= '/project/show/' + project.id %>">
     <div class="project-title">
         <strong><%= project.get('name') %></strong>
-        <span class="project-reviews pull-right">
-            <strong>Reviews:</strong> <%= project.get('reviews').length || '0' %>
-        </span>
     </div>
     <div class="project-info">
-        <span class="project-version">
+        <p class="project-reviews">
+            <strong>Reviews:</strong> <%= project.get('reviews').length || '0' %>
+        </p>
+        <p class="project-version">
             <strong>Version:</strong> <%= project.get('version') %>
-        </span>
-        <span class="project-updated-at pull-right">
+        </p>
+        <p class="project-updated-at">
             <strong>Updated:</strong> <%= moment(new Date(project.get('updated_at'))).fromNow().toString("mm:dd") %>
-        </span>
+        </p>
     </div>
 </a>
