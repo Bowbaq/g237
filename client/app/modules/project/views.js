@@ -83,7 +83,8 @@ define(["app", "modules/review" ], function(app, Review) {
       
       var views = {
         '#reviews': new Review.Views.List({
-          collection: this.model.reviews
+          collection: this.model.reviews,
+          show_author: true
         }),
         '#add-review': new Review.Views.NewForm({
           collection: this.model.reviews,
@@ -252,6 +253,69 @@ define(["app", "modules/review" ], function(app, Review) {
         
         updated_at: new Date()
       };
+    },
+    
+    data: function(){
+      return { project: null };
+    }
+  });
+  
+  Views.EditForm = Backbone.View.extend({
+    template: "project/create-edit-form",
+    
+    events: {
+      'submit #project-form' : 'update'
+    },
+    
+    initialize: function(options) {
+      this.model = options.model;
+    },
+    
+    update: function(e) {
+      e.preventDefault();
+      
+      if(this.validateForm()) {
+        this.model.save(
+          this.serializeForm(),
+          {
+            wait: true,
+            success: this.updateSuccess.bind(this),
+            error: function(err) {
+              console.log(err);
+            }
+          }
+        );
+      }
+      
+      return false;
+    },
+    
+    updateSuccess: function(project) {
+      app.router.navigate('/project/show/' + project.id, {trigger: true});
+    },
+    
+    validateForm: function(){
+      // TODO: proper validation
+      return true;
+    },
+    
+    serializeForm: function(){
+      return {
+        name: this.$el.find('#name').val(),
+        description: this.$el.find('#description').val(),
+        version: this.$el.find('#version').val(),
+        
+        link: {
+          ios: this.$el.find('#link-ios').val(),
+          android: this.$el.find('#link-android').val()
+        },
+        
+        updated_at: new Date()
+      };
+    },
+    
+    data: function() {
+      return {  project: this.model };
     }
   });
   

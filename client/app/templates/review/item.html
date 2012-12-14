@@ -1,7 +1,10 @@
+<a>
+<% if(show_author) {%>
 <p>
     <strong>Author:</strong>
     <%= review.get('author') && review.get('author').username %>
 </p>
+<% } %>
 <p>
     <strong>Posted:</strong>
     <%= moment(new Date(review.get('posted_at'))).fromNow().toString() %>
@@ -13,3 +16,4 @@
     <strong>Down:</strong> <%= review.get('lo_vote') %>
     <a href="#" class="lovote" data-bypass="true">(-)</a>
 </p> -->
+</a>

@@ -52,10 +52,7 @@ Project.helpers = _.extend(Project.helpers || {}, {
   },
   
   create: function(data, callback) {
-    // delete data.team;
-    console.log(data.team);
-    delete data.join_requests;
-    delete data.reviews;
+    data = _.omit(data, 'join_requests', 'reviews');
     
     var project = new Project(data);
     
@@ -63,14 +60,26 @@ Project.helpers = _.extend(Project.helpers || {}, {
       if (err) {
         callback(err, null);
       } else {
-        Project.helpers.find(created.id, callback);
+        User.helpers.find(_.first(created.team), function(err, user){
+          if(err) {
+            callback(err, null);
+          } else {
+            user.projects.push(created);
+            user.save();
+            
+            Project.helpers.find(created.id, callback);
+          }
+        }, true);
       }
     });
   },
   
   update: function(id, data, callback) {
+    data = _.omit(data, '_id', '__v', 'team', 'join_requests', 'reviews');
+    
     Project.findByIdAndUpdate(id, data, function(err, project) {
       if(err) {
+        console.log('Project update error:', err)
         callback(err, null);
       } else {
         Project.helpers.find(id, callback);

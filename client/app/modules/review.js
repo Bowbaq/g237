@@ -50,23 +50,27 @@ function(app) {
   Review.Views.List = Backbone.View.extend({
     tagName: 'ul',
     
-    className: 'review-list',
+    className: 'review-list nav nav-tabs nav-stacked',
     
     beforeRender: function() {
       this.$el.children().remove();
       this.collection.each(function(review){
         this.insertView(new Review.Views.Item({
-          model: review
+          model: review,
+          show_author: this.show_author
         }));
       }, this);
     },
     
-    initialize: function() {
+    initialize: function(options) {
+      this.show_author = options.show_author;
+      
       this.collection.on('reset', this.render, this);
       
       this.collection.on("add", function(review) {
         this.insertView(new Review.Views.Item({
-          model: review
+          model: review,
+          show_author: this.show_author
         })).render();
       }, this);
     }
@@ -78,11 +82,16 @@ function(app) {
     
     tagName: 'li',
     
-    className: 'project-item',
+    className: 'review-item',
+    
+    initialize: function(options) {
+      this.show_author = options.show_author;
+    },
     
     data: function() {
       return {
-        review: this.model
+        review: this.model,
+        show_author: this.show_author
       };
     },
     

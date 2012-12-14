@@ -7,7 +7,6 @@ var _ = require('lodash');
     
 var UserSchema = new Mongoose.Schema({
   name: String,
-  semester: String,
   
   projects: [{ type: ObjectId, ref: 'Project' }],
   join_requests: [{ type: ObjectId, ref: 'Project' }],
@@ -87,7 +86,15 @@ User.helpers = _.extend(User.helpers || {}, {
   },
   
   sanitize: function sanitize(user) {
-    return _.omit(user.toObject(), 'hash', 'salt');
+    var safe = _.omit(user.toObject(), 'hash', 'salt');
+    safe.reviews =  _.map(safe.reviews, function(review){
+      review.author = _.omit(safe, 'reviews');
+      return review;
+    });
+    
+    console.log(safe);
+    
+    return safe;
   }
 });
 

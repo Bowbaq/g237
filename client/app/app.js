@@ -64,22 +64,7 @@ define([
 
       // Create a new Layout with options.
       var layout = new Backbone.Layout(_.extend({
-        el: "#main",
-        
-        events: {
-          'click #menu-gallery': 'projectActive',
-          'click #menu-users': 'usersActive'
-        },
-        
-        projectActive: function() {
-          $('.navbar-fixed-bottom li').removeClass('active');
-          $('#menu-gallery').addClass('active');
-        },
-        
-        usersActive: function() {
-          $('.navbar-fixed-bottom li').removeClass('active');
-          $('#menu-users').addClass('active');
-        }
+        el: "#main"
       }, options));
 
       // Cache the refererence.

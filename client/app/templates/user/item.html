@@ -1,0 +1,13 @@
+<a href="<%= '/users/show/' + user.id %>">
+    <div class="user-title">
+        <strong><%= user.get('name') || user.get('username') %></strong>
+    </div>
+    <div class="user-info">
+        <p class="user-projects">
+            <strong>Projects:</strong> <%= user.get('projects').length || '0' %>
+        </p>
+        <p class="user-reviews">
+            <strong>Reviews:</strong> <%= user.get('reviews').length || '0' %>
+        </p>
+    </div>
+</a>

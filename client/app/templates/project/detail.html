@@ -14,7 +14,7 @@
 <h3>Team:</h3>
 <ul class="nav nav-tabs nav-stacked">
     <% _.forEach(project.get('team'), function(member) { %>
-        <li><a href="user/<%= member._id %>"><%= member.username %></a></li>
+        <li><a href="/users/show/<%= member._id %>"><%= member.username %></a></li>
     <% }); %>
 </ul>
 <div id="join-button">

@@ -64,7 +64,7 @@
 body {
     background: @lightGray;
     padding-top: 60px;
-    padding-bottom: 40px;
+    padding-bottom: 60px;
 }
 
 h4 {
@@ -123,7 +123,7 @@ h4 {
 
 // Gallery page style
 
-.project-list {
+.project-list, .user-list {
     display: block;
     
     margin: 0 auto;
@@ -133,7 +133,7 @@ h4 {
         list-style: none;
         .item();
         
-        .project-title {
+        .project-title, .user-title {
             
             &> strong {
                 font-size: 150%;
@@ -146,4 +146,9 @@ h4 {
 .project-list-controls {
     margin-top: 1em;
     text-align: center;
+}
+
+.review-list .review-item a {
+    text-decoration: none;
+    color: inherit;
 }

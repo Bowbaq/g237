@@ -1,0 +1,11 @@
+<h3>Projects:</h3>
+<ul class="nav nav-tabs nav-stacked">
+    <% console.log(user); _.forEach(user.get('projects'), function(project) { %>
+        <li><a href="project/show/<%= project._id %>"><%= project.name %></a></li>
+    <% }); %>
+</ul>
+
+<h3>Reviews:</h3>
+<div id="reviews">
+    <!-- Reviews go here -->
+</div>

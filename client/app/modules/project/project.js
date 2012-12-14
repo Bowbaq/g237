@@ -64,7 +64,6 @@ function(app, Model, Collection, Views, Layout) {
     
     var config = {
       back: true,
-      back_to: '/',
       title: project.get('name')
     };
     
@@ -106,6 +105,9 @@ function(app, Model, Collection, Views, Layout) {
           back: true,
           title: "Edit"
         })
+      }),
+      ".content" : new Project.Views.EditForm({
+        model: project
       })
     };
   };

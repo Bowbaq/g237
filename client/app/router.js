@@ -6,12 +6,13 @@ define([
   "modules/layout",
   "modules/auth",
   "modules/project/project",
+  "modules/user",
   
   // Plugins
   "plugins/backbone-filter"
 ],
 
-function(app, Layout, Auth, Project) {
+function(app, Layout, Auth, Project, User) {
 
   // Defining the application router, you can attach sub routers here.
   var Router = Backbone.Router.extend({
@@ -20,7 +21,8 @@ function(app, Layout, Auth, Project) {
       
       var collections = {
         user: Auth.user(),
-        projects: new Project.Collection()
+        projects: new Project.Collection(),
+        people: new User.Collection()
       };
       
       Auth.account().on('change', function(){
@@ -45,7 +47,11 @@ function(app, Layout, Auth, Project) {
       "":                   "showGallery",
       "project/new":        "newProject",
       "project/show/:id":   "showProject",
-      "project/edit/:id":   "editProject"
+      "project/edit/:id":   "editProject",
+      
+      // User routes
+      "users":              "showUserList",
+      "users/show/:id":     "showUser"
     },
     
     login: function(){
@@ -65,7 +71,6 @@ function(app, Layout, Auth, Project) {
     logout: function() {
       if(Auth.authenticated()) {
         Auth.logout(function(){
-          console.log('Navigating to /login');
           this.navigate('/login', { trigger: true });
         }.bind(this));
       }
@@ -85,6 +90,7 @@ function(app, Layout, Auth, Project) {
       
       // Fetch the data
       this.projects.fetch();
+      this.projects.sort();
     },
     
     showProject: function(id) {           
@@ -108,6 +114,26 @@ function(app, Layout, Auth, Project) {
         success: function(){   
           app.useLayout("layout/page").setViews(
             Project.editViews(this.projects.get(id))
+          ).render();
+        }.bind(this)
+      });
+    },
+    
+    showUserList: function() {
+      this.people.fetch({
+        success: function(){
+          app.useLayout("layout/page").setViews(
+            User.listViews(this.people)
+          ).render();
+        }.bind(this)
+      });
+    },
+    
+    showUser: function(id) {
+      this.people.fetch({
+        success: function() {
+          app.useLayout('layout/page').setViews(
+            User.detailViews(this.people.get(id), this.user)
           ).render();
         }.bind(this)
       });
