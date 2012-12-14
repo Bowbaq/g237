@@ -63,19 +63,57 @@
 // General style
 body {
     background: @lightGray;
+    padding-top: 60px;
+    padding-bottom: 40px;
 }
 
 h4 {
     color: @gray;
 }
 
-.header {
+.navbar-fixed-top, .navbar-fixed-bottom {
+    position: fixed;
+    
+    .navbar-inner .container-fluid {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+.navbar-fixed-bottom .nav {
+    margin: 0;
+    width: 100%;
+    
+    li {
+        width: 49.5%;
+        text-align: center;
+        
+        &.active a , &.active a:hover {
+            background: transparent;
+        }
+    }
+}
+
+.header {    
+    position: relative;
     text-align: center;
     
     h4 {
-        display: inline-block;
+        width: 50%;
         margin: 0 auto;
         padding-top: 0.45em;
+    }
+    
+    a.left {
+        position: absolute;
+        top: 5px;
+        left: 30px;
+    }
+    
+    a.right {
+        position: absolute;
+        top: 5px;
+        right: 30px;
     }
 }
 

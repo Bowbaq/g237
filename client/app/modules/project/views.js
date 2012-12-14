@@ -92,7 +92,7 @@ define(["app", "modules/review" ], function(app, Review) {
         })
       };
       
-      if(this.isTeamMember()) {
+      if(this.model.isTeamMember(this.user)) {
         if(this.model.get('join_requests').length > 0) {
           views['#join-requests'] = new Views.JoinRequests({
             model: this.model
@@ -112,18 +112,10 @@ define(["app", "modules/review" ], function(app, Review) {
       return {  project: this.model };
     },
     
-    isTeamMember: function() {
-      var isMember = _.chain(this.model.get('team'))
-        .map(function(user){ return user._id; })
-        .contains(this.user._id)
-        .value()
-      ;
-      return isMember;
-    },
-    
     isRequesting: function() {
+      console.log("this.user :", this.user);
       var isRequesting = _.chain(this.model.get('join_requests'))
-        .map(function(user){ return user._id; })
+        .map(function(user){ console.log("Map :", user); return user._id; })
         .contains(this.user._id)
         .value()
       ;

@@ -23,6 +23,10 @@ function(app, Layout, Auth, Project) {
         projects: new Project.Collection()
       };
       
+      Auth.account().on('change', function(){
+        this.user = Auth.user();
+      }.bind(this));
+      
       _.extend(this, collections);
     },
     
@@ -40,7 +44,8 @@ function(app, Layout, Auth, Project) {
       // Project routes
       "":                   "showGallery",
       "project/new":        "newProject",
-      "project/show/:id":   "showProject"
+      "project/show/:id":   "showProject",
+      "project/edit/:id":   "editProject"
     },
     
     login: function(){
@@ -59,86 +64,53 @@ function(app, Layout, Auth, Project) {
     
     logout: function() {
       if(Auth.authenticated()) {
-        Auth.logout();
-        this.navigate('/login', { trigger: true });
+        Auth.logout(function(){
+          console.log('Navigating to /login');
+          this.navigate('/login', { trigger: true });
+        }.bind(this));
       }
     },
 
     checkAuthentication: function(){
       if(!Auth.authenticated()) {
-        console.log('Redirecting to the login page');
         this.navigate('/login', {trigger: true});
         return false;
-      }
-      
-      if(!this.user) {
-        this.user = Auth.user();
       }
     },
 
     showGallery: function() {
-      app.useLayout('layout/page').setViews({
-        '.header': new Layout.Views.Header({
-          model: new Layout.Models.Header({
-            title: "Gallery",
-            right: {
-              link: '/project/new',
-              text: 'Add',
-              iconName: 'icon-plus icon-white'
-            }
-          })
-        }),
-        '.content': new Backbone.Layout({
-          template: "project/gallery",
-          
-          views: {
-            '.controls': new Project.Views.ListControls({
-              collection: this.projects
-            }),
-            '.list': new Project.Views.List({
-              collection: this.projects
-            })
-          }
-        })
-      }).render();
+      app.useLayout('layout/page').setViews(
+        Project.galleryViews(this.projects)
+      ).render();
       
       // Fetch the data
       this.projects.fetch();
     },
     
-    showProject: function(id) {
+    showProject: function(id) {           
       this.projects.fetch({
-        success: function(){          
-          app.useLayout("layout/page").setViews({
-            ".header": new Layout.Views.Header({
-              model: new Layout.Models.Header({
-                back: true,
-                back_to: '/',
-                title: this.projects.get(id).get('name')
-              })
-            }),
-            ".content" : new Project.Views.Detail({
-              model: this.projects.get(id),
-              user: this.user
-            })
-          }).render();
+        success: function(){   
+          app.useLayout("layout/page").setViews(
+            Project.detailViews(this.projects.get(id), this.user)
+          ).render();
         }.bind(this)
       });
     },
     
     newProject: function(){
-      app.useLayout("layout/page").setViews({
-        ".header": new Layout.Views.Header({
-          model: new Layout.Models.Header({
-            back: true,
-            title: "New project"
-          })
-        }),
-        ".content" : new Project.Views.NewForm({
-          collection: this.projects,
-          user: this.user
-        })
-      }).render();
+      app.useLayout("layout/page").setViews(
+        Project.createViews(this.projects, this.user)
+      ).render();
+    },
+    
+    editProject: function(id) {
+      this.projects.fetch({
+        success: function(){   
+          app.useLayout("layout/page").setViews(
+            Project.editViews(this.projects.get(id))
+          ).render();
+        }.bind(this)
+      });
     }
   });
 

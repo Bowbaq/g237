@@ -16,3 +16,5 @@
 /server.tmp
 /github-viewer/
 /client.old/dist/
+/client/dist/
+/release/

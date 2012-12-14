@@ -23,7 +23,7 @@ function(app) {
       right: {
         link: '',
         text: '',
-        className: 'pull-right btn btn-inverse',
+        className: 'right btn btn-inverse',
         iconName: ''
       }
     },

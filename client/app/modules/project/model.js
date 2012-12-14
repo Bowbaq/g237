@@ -29,6 +29,14 @@ define(["app", "modules/review"], function(app, Review) {
           }.bind(this)
         });
       }
+    },
+    
+    isTeamMember: function(user) {
+      return _.chain(this.get('team'))
+        .map(function(team_member){ return team_member._id; })
+        .contains(user._id)
+        .value()
+      ; 
     }
   });
   

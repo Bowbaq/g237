@@ -55,6 +55,10 @@ function(app, User) {
     return !! account.get('user');
   };
   
+  Auth.account = function() {
+    return account;
+  };
+  
   Auth.user = function() {
     return Auth.authenticated() ? account.get('user') : null ;
   };
@@ -86,14 +90,15 @@ function(app, User) {
       },
       success: function(user) {
         account.save({
-          user: new User.Model(user)
+          user: user
+        }, {
+          success: function() {  app.router.navigate('/', {trigger: true}); }
         });
-        app.router.navigate('/', {trigger: true});
       }
     });
   };
   
-  Auth.logout = function() {
+  Auth.logout = function(callback) {
     if(!Auth.authenticated()) {
       console.log('Aborting logout');
       return;
@@ -108,6 +113,8 @@ function(app, User) {
       success: function() {
         account.save({
           user: null
+        }, {
+          success: callback
         });
       }
     });
