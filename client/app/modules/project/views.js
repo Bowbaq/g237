@@ -98,7 +98,7 @@ define(["app", "modules/review" ], function(app, Review) {
             model: this.model
           });
         }
-      } else if(!this.isRequesting()) {
+      } else if(!this.model.isRequesting(this.user)) {
         views['#join-button'] = new Views.JoinTeam({
           model: this.model,
           user: this.user
@@ -110,16 +110,6 @@ define(["app", "modules/review" ], function(app, Review) {
     
     data: function() {
       return {  project: this.model };
-    },
-    
-    isRequesting: function() {
-      console.log("this.user :", this.user);
-      var isRequesting = _.chain(this.model.get('join_requests'))
-        .map(function(user){ console.log("Map :", user); return user._id; })
-        .contains(this.user._id)
-        .value()
-      ;
-      return isRequesting;
     }
   });
   
@@ -209,10 +199,10 @@ define(["app", "modules/review" ], function(app, Review) {
   
   // New project form
   Views.NewForm = Backbone.View.extend({
-    template: "project/new",
+    template: "project/create-edit-form",
     
     events: {
-      'submit #project-create-form' : 'create'
+      'submit #project-form' : 'create'
     },
     
     initialize: function(options) {

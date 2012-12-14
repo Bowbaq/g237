@@ -37,6 +37,14 @@ define(["app", "modules/review"], function(app, Review) {
         .contains(user._id)
         .value()
       ; 
+    },
+    
+    isRequesting: function(user) {
+      return _.chain(this.get('join_requests'))
+        .map(function(team_member){ return team_member._id; })
+        .contains(user._id)
+        .value()
+      ;
     }
   });
   
