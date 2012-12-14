@@ -17,24 +17,12 @@
         <li><a href="user/<%= member._id %>"><%= member.username %></a></li>
     <% }); %>
 </ul>
-
-<% if(show_join_requests) { %>
-<h3>Join requests:</h3>
-<table class="table table-striped">
-    <tr>
-        <th>User</th>
-        <th>Accept</th>
-        <th>Deny</th>
-    </tr>
-    <% _.forEach(project.get('join_requests'), function(user){ %>
-        <tr>
-            <td><li><a href="user/<%= user._id %>"><%= user.username %></a></li></td>
-            <td></td>
-            <td></td>
-        </tr>
-    <% }); %>
-</table>
-<% } %>
+<div id="join-button">
+    
+</div>
+<div id="join-requests">
+    
+</div>
 
 <h3>Reviews:</h3>
 <div id="reviews">

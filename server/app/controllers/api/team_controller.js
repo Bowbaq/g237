@@ -65,10 +65,12 @@ action(function deny(){
     
     this.user.save(function(err) {
       if(err) {
+        console.log('Error saving user :', err);
         send(404);
       } else {
         this.project.save(function(err){
           if(err) {
+            console.log('Error saving project :', err);
             send(404);
           } else {
             Project.helpers.find(this.project.id, sendDataOrNotFound);
@@ -77,6 +79,7 @@ action(function deny(){
       }
     }.bind(this));
   } else {
+    console.log('User not in requests');
     send(404);
   }
 });

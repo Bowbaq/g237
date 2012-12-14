@@ -70,6 +70,10 @@ function(app, Layout, Auth, Project) {
         this.navigate('/login', {trigger: true});
         return false;
       }
+      
+      if(!this.user) {
+        this.user = Auth.user();
+      }
     },
 
     showGallery: function() {

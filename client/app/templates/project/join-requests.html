@@ -1,0 +1,15 @@
+<h3>Join requests:</h3>
+<table class="table table-striped">
+    <tr>
+        <th>User</th>
+        <th>Accept</th>
+        <th>Deny</th>
+    </tr>
+    <% _.forEach(project.get('join_requests'), function(user){ %>
+        <tr>
+            <td><a href="user/<%= user._id %>"><%= user.username %></a></td>
+            <td><a href="#" class="btn btn-success" id="grant" data-user-id="<%= user._id %>">Accept</a></td>
+            <td><a href="#" class="btn btn-danger" id="deny" data-user-id="<%= user._id %>">Deny</a></td>
+        </tr>
+    <% }); %>
+</table>

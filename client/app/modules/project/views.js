@@ -70,28 +70,148 @@ define(["app", "modules/review" ], function(app, Review) {
     
     initialize: function(options) {
       this.model = options.model;
+      this.user = options.user;
       
-      var reviewList = new Review.Views.List({
-        collection: this.model.reviews
+      this.model.on('change', this.render, this);
+    },
+    
+    beforeRender: function() {
+      // Remove old views if any (is there a cleaner way?)      
+      this.getView(function(view){
+        view.remove();
       });
       
-      var reviewForm = new Review.Views.NewForm({
-        collection: this.model.reviews,
-        user: options.user,
-        project: this.model
-      });
-            
-      this.setViews({
-        '#reviews': reviewList,
-        '#add-review': reviewForm
-      });
+      var views = {
+        '#reviews': new Review.Views.List({
+          collection: this.model.reviews
+        }),
+        '#add-review': new Review.Views.NewForm({
+          collection: this.model.reviews,
+          user: this.user,
+          project: this.model
+        })
+      };
+      
+      if(this.isTeamMember()) {
+        if(this.model.get('join_requests').length > 0) {
+          views['#join-requests'] = new Views.JoinRequests({
+            model: this.model
+          });
+        }
+      } else if(!this.isRequesting()) {
+        views['#join-button'] = new Views.JoinTeam({
+          model: this.model,
+          user: this.user
+        });
+      }
+                  
+      this.setViews(views);
     },
     
     data: function() {
-      return {
-        project: this.model,
-        show_join_requests: false
-      };
+      return {  project: this.model };
+    },
+    
+    isTeamMember: function() {
+      var isMember = _.chain(this.model.get('team'))
+        .map(function(user){ return user._id; })
+        .contains(this.user._id)
+        .value()
+      ;
+      return isMember;
+    },
+    
+    isRequesting: function() {
+      var isRequesting = _.chain(this.model.get('join_requests'))
+        .map(function(user){ return user._id; })
+        .contains(this.user._id)
+        .value()
+      ;
+      return isRequesting;
+    }
+  });
+  
+  Views.JoinTeam = Backbone.View.extend({
+    template: "project/join-button",
+    
+    events: {
+      'submit #join-team-form': 'joinTeamRequest'
+    },
+    
+    initialize: function(options) {
+      this.model = options.model;
+      this.user = options.user;
+    },
+    
+    joinTeamRequest: function(e) {
+      e.preventDefault();
+      
+      $.ajax({
+        type: "POST",
+        url: app.api_root + 'api/projects/' + this.model.id + '/team/' + this.user._id,
+        data: {},
+        error: function(xhr, status, err) {
+          console.log(xhr, status, err);
+        },
+        success: function(data) {
+          this.model.fetch();
+        }.bind(this)
+      });
+      
+      return false;
+    }
+  });
+  
+  Views.JoinRequests = Backbone.View.extend({
+    template: "project/join-requests",
+    
+    events: {
+      'click #grant': 'grantRequest',
+      'click #deny': 'denyRequest'
+    },
+    
+    initialize: function(options) {
+      this.model = options.model;
+    },
+    
+    data: function() {
+      return { project: this.model };
+    },
+    
+    grantRequest: function(e) {
+      e.preventDefault();
+      
+      $.ajax({
+        type: "PUT",
+        url: app.api_root + 'api/projects/' + this.model.id + '/team/' + this.$el.find('#grant').attr('data-user-id'),
+        data: {},
+        error: function(xhr, status, err) {
+          console.log(xhr, status, err);
+        },
+        success: function(data) {
+          this.model.fetch();
+        }.bind(this)
+      });
+      
+      return false;
+    },
+    
+    denyRequest: function(e) {
+      e.preventDefault();
+            
+      $.ajax({
+        type: "DELETE",
+        url: app.api_root + 'api/projects/' + this.model.id + '/team/' + this.$el.find('#deny').attr('data-user-id'),
+        data: {},
+        error: function(xhr, status, err) {
+          console.log(xhr, status, err);
+        },
+        success: function(data) {
+          this.model.fetch();
+        }.bind(this)
+      });
+      
+      return false;
     }
   });
   
@@ -150,10 +270,6 @@ define(["app", "modules/review" ], function(app, Review) {
         
         updated_at: new Date()
       };
-    },
-    
-    resetForm: function() {
-      // this.$el.find('input, textarea').val('');
     }
   });
   
