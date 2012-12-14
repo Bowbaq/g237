@@ -3,13 +3,13 @@
     <%= review.get('author') && review.get('author').username %>
 </p>
 <p>
-    <strong>Posted on:</strong>
-    <%= moment(new Date(review.get('posted_at'))).format('MMMM Do YYYY, h:mm:ss a') %>
+    <strong>Posted:</strong>
+    <%= moment(new Date(review.get('posted_at'))).fromNow().toString() %>
 </p>
 <p><%= review.get('body') %></p>
-<p>
+<!-- <p>
     <strong>Up:</strong> <%= review.get('up_vote') %>
     <a href="#" class="upvote" data-bypass="true">(+)</a>
     <strong>Down:</strong> <%= review.get('lo_vote') %>
     <a href="#" class="lovote" data-bypass="true">(-)</a>
-</p>
+</p> -->

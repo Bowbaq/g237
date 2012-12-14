@@ -114,7 +114,8 @@ function(app, Layout, Auth, Project) {
               })
             }),
             ".content" : new Project.Views.Detail({
-              model: this.projects.get(id)
+              model: this.projects.get(id),
+              user: this.user
             })
           }).render();
         }.bind(this)

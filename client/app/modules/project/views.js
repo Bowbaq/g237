@@ -76,7 +76,9 @@ define(["app", "modules/review" ], function(app, Review) {
       });
       
       var reviewForm = new Review.Views.NewForm({
-        collection: this.model.reviews
+        collection: this.model.reviews,
+        user: options.user,
+        project: this.model
       });
             
       this.setViews({

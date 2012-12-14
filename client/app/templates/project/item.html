@@ -10,7 +10,7 @@
             <strong>Version:</strong> <%= project.get('version') %>
         </p>
         <p class="project-updated-at">
-            <strong>Updated:</strong> <%= moment(new Date(project.get('updated_at'))).fromNow().toString("mm:dd") %>
+            <strong>Updated:</strong> <%= moment(new Date(project.get('updated_at'))).fromNow().toString() %>
         </p>
     </div>
 </a>

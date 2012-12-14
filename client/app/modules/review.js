@@ -16,7 +16,7 @@ function(app) {
     
     defaults: {
       author: null,
-      project: '',
+      project: null,
       
       body: '',
       
@@ -33,10 +33,15 @@ function(app) {
     
     initialize: function(options) {
       this.project_id = options.project_id;
+      this.comparator = this.sortByLastPosted.bind(this);
     },
     
     url: function() {
       return app.api_root + 'api/projects/' + this.project_id + '/reviews';
+    },
+    
+    sortByLastPosted: function(first, second) {
+      return (new Date(first.get('posted_at'))) < (new Date(second.get('posted_at'))) ? 1 : -1;
     }
   });
   
@@ -58,6 +63,12 @@ function(app) {
     
     initialize: function() {
       this.collection.on('reset', this.render, this);
+      
+      this.collection.on("add", function(review) {
+        this.insertView(new Review.Views.Item({
+          model: review
+        })).render();
+      }, this);
     }
   });
   
@@ -93,7 +104,39 @@ function(app) {
   
   // Create form
   Review.Views.NewForm = Backbone.View.extend({
-    template: "review/new"
+    template: "review/new",
+    
+    events: {
+      'submit #review-create-form': 'addReview'
+    },
+    
+    initialize: function(options) {
+      this.user = options.user;
+      this.project = options.project;
+    },
+    
+    addReview: function(e){
+      e.preventDefault();
+      
+      this.collection.create({
+        author: this.user._id,
+        project: this.project.id,
+        
+        body: this.$el.find('#review').val()
+      }, {
+        wait: true,
+        error: function(err) {
+          console.log(err);
+        },
+        success: this.afterAddReview.bind(this)
+      });
+            
+      return false;
+    },
+    
+    afterAddReview: function(){
+      this.$el.find('#review').val('');
+    }
   });
   
   // Return the module for AMD compliance.
