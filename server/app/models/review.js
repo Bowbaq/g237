@@ -33,6 +33,7 @@ Review.helpers = _.extend(Review.helpers || {}, {
   },
   
   find: function find(project, id, callback) {
+    console.log(project._id, id);
     Review.findOne({project: project._id, _id: id}).populate('author')
     .exec(function(err, review){
       if(err) {
@@ -69,12 +70,32 @@ Review.helpers = _.extend(Review.helpers || {}, {
     }, true);
   },
   
-  update: function update(id, data, callback) {
-    Review.findByIdAndUpdate(id, _.pick(data, 'up_vote', 'lo_vote'), function(err, project) {
+  upvote: function(project, id, callback) {
+    Review.helpers.find(project, id, function(err, review){
       if(err) {
         callback(err, null);
       } else {
-        Project.helpers.find(id, callback);
+        Review.helpers.update(project, id, { up_vote: review.up_vote + 1 }, callback);
+      }
+    });
+  },
+  
+  lovote: function(project, id, callback) {
+    Review.helpers.find(project, id, function(err, review){
+      if(err) {
+        callback(err, null);
+      } else {
+        Review.helpers.update(project, id, { lo_vote: review.lo_vote + 1 }, callback);
+      }
+    });
+  },
+  
+  update: function update(project, id, data, callback) {
+    Review.findByIdAndUpdate(id, _.pick(data, 'up_vote', 'lo_vote'), function(err) {
+      if(err) {
+        callback(err, null);
+      } else {
+        Review.helpers.find(project, id, callback);
       }
     });
   },

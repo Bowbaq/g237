@@ -10,7 +10,7 @@ exports.routes = function (map) {
     api.resources('projects', { except: [ 'new', 'edit', 'destroy' ] }, function(project){
       project.resources('reviews', { only: [ 'index', 'create', 'update', 'upvote', 'downvote' ] }, function(review) {
         review.put('upvote', "reviews#upvote");
-        review.put('downvote', "reviews#downvote");
+        review.put('lovote', "reviews#lovote");
       });
       
       project.post('team/:user_id', 'team#request');

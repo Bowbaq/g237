@@ -84,6 +84,7 @@ define(["app", "modules/review" ], function(app, Review) {
       var views = {
         '#reviews': new Review.Views.List({
           collection: this.model.reviews,
+          user: this.user,
           show_author: true
         }),
         '#add-review': new Review.Views.NewForm({

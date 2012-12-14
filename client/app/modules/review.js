@@ -57,6 +57,7 @@ function(app) {
       this.collection.each(function(review){
         this.insertView(new Review.Views.Item({
           model: review,
+          user: this.user,
           show_author: this.show_author
         }));
       }, this);
@@ -64,12 +65,14 @@ function(app) {
     
     initialize: function(options) {
       this.show_author = options.show_author;
+      this.user = options.user;
       
       this.collection.on('reset', this.render, this);
       
       this.collection.on("add", function(review) {
         this.insertView(new Review.Views.Item({
           model: review,
+          user: this.user,
           show_author: this.show_author
         })).render();
       }, this);
@@ -85,6 +88,7 @@ function(app) {
     className: 'review-item',
     
     initialize: function(options) {
+      this.user = options.user;
       this.show_author = options.show_author;
     },
     
@@ -96,18 +100,48 @@ function(app) {
     },
     
     afterRender: function() {
-      this.$el.find('.upvote').on('click', this.upvote);
-      this.$el.find('.lovote').on('click', this.lovote);
+      this.$el.find('.upvote').on('click', this.upvote.bind(this));
+      this.$el.find('.lovote').on('click', this.lovote.bind(this));
     },
     
     upvote: function(e) {
       e.preventDefault();
-      console.log('TODO: upvote');
+      
+      $.ajax({
+        type: "PUT",
+        url: app.api_root + 'api/projects/' + this.model.get('project') + '/reviews/' + this.model.id + '/upvote',
+        data: {
+          user_id: this.user._id
+        },
+        error: function(xhr, status, err) {
+          console.log(xhr, status, err);
+        },
+        success: function(data) {
+          this.model.collection.fetch();
+        }.bind(this)
+      });
+      
+      return false;
     },
     
     lovote: function(e) {
       e.preventDefault();
-      console.log('TODO: lovote');
+      
+      $.ajax({
+        type: "PUT",
+        url: app.api_root + 'api/projects/' + this.model.get('project') + '/reviews/' + this.model.id + '/lovote',
+        data: {
+          user_id: this.user._id
+        },
+        error: function(xhr, status, err) {
+          console.log(xhr, status, err);
+        },
+        success: function(data) {
+          this.model.collection.fetch();
+        }.bind(this)
+      });
+      
+      return false;
     }
   });
   

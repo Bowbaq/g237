@@ -104,6 +104,58 @@ function(app, Project, Review, Layout) {
     }
   });
   
+  User.Views.EditForm = Backbone.View.extend({
+    template: "user/edit-form",
+    
+    events: {
+      'submit #user-form' : 'update'
+    },
+    
+    initialize: function(options) {
+      this.model = options.model;
+    },
+    
+    update: function(e) {
+      e.preventDefault();
+      
+      if(this.validateForm()) {
+        this.model.save(
+          this.serializeForm(),
+          {
+            wait: true,
+            success: this.updateSuccess.bind(this),
+            error: function(err) {
+              console.log(err);
+            }
+          }
+        );
+      }
+      
+      return false;
+    },
+    
+    updateSuccess: function(user) {
+      app.router.navigate('/users/show/' + user.id, {trigger: true});
+    },
+    
+    validateForm: function(){
+      // TODO: proper validation
+      return true;
+    },
+    
+    serializeForm: function(){
+      return {
+        name: this.$el.find('#name').val()
+      };
+    },
+    
+    data: function() {
+      return {
+        user: this.model
+      };
+    }
+  });
+  
   User.listViews = function(users) {
     return {
       ".header": new Layout.Views.Header({
@@ -142,9 +194,24 @@ function(app, Project, Review, Layout) {
         
         views: {
           '#reviews': new Review.Views.List({
-            collection: new Review.Collection(user.get('reviews'))
+            collection: new Review.Collection(user.get('reviews')),
+            user: current
           })
         }
+      })
+    };
+  };
+  
+  User.editViews = function(user) {
+    return {
+      ".header": new Layout.Views.Header({
+        model: new Layout.Models.Header({
+          back: true,
+          title: "Edit"
+        })
+      }),
+      ".content": new User.Views.EditForm({
+        model: user
       })
     };
   };

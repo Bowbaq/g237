@@ -1,0 +1,16 @@
+<form id="user-form">
+  <legend>Generic information</legend>
+  <div class="control-group">
+    <label class="control-label" for="name">Name</label>
+    <div class="controls">
+      <input type="text" class="span12" id="name" name="name" placeholder="John Doe" value="<%= user && user.get('name') %>">
+      <span class="help-block">Used instead of the username for display purposes</span>
+    </div>
+  </div>
+  <legend>Update</legend>
+  <div class="control-group">
+    <div class="controls">
+       <button type="submit" class="btn btn-block btn-primary">Save changes</button>
+    </div>
+  </div>
+</form>

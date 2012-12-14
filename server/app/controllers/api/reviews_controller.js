@@ -13,6 +13,14 @@ action(function create(){
   Review.helpers.create(this.project, req.body, sendDataOrNotFound);
 });
 
+action(function upvote(){
+  Review.helpers.upvote(this.project, params.review_id, sendDataOrNotFound);
+});
+
+action(function lovote(){
+  Review.helpers.lovote(this.project, params.review_id, sendDataOrNotFound);
+});
+
 function loadProject() {
   Project.helpers.find(params.project_id, function(err, project) {
     if(err) {

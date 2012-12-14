@@ -2,7 +2,7 @@
 <% if(show_author) {%>
 <p>
     <strong>Author:</strong>
-    <%= review.get('author') && review.get('author').username %>
+    <%= review.get('author') && (review.get('author').name || review.get('author').username) %>
 </p>
 <% } %>
 <p>
@@ -10,10 +10,11 @@
     <%= moment(new Date(review.get('posted_at'))).fromNow().toString() %>
 </p>
 <p><%= review.get('body') %></p>
-<!-- <p>
-    <strong>Up:</strong> <%= review.get('up_vote') %>
-    <a href="#" class="upvote" data-bypass="true">(+)</a>
-    <strong>Down:</strong> <%= review.get('lo_vote') %>
-    <a href="#" class="lovote" data-bypass="true">(-)</a>
-</p> -->
+<div>
+    <strong>Voted up:</strong> <%= review.get('up_vote') %>
+    <button class="btn btn-mini upvote"><i class="icon-arrow-up"></i></button>
+    <strong>Voted down:</strong> <%= review.get('lo_vote') %>
+    <button class="btn btn-mini lovote"><i class="icon-arrow-down"></i></button>
+    <div class="hidden">You may not vote more than once</div>
+</div>
 </a>

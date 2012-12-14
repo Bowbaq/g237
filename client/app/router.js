@@ -51,7 +51,8 @@ function(app, Layout, Auth, Project, User) {
       
       // User routes
       "users":              "showUserList",
-      "users/show/:id":     "showUser"
+      "users/show/:id":     "showUser",
+      "users/edit/:id":     "editUser"
     },
     
     login: function(){
@@ -134,6 +135,16 @@ function(app, Layout, Auth, Project, User) {
         success: function() {
           app.useLayout('layout/page').setViews(
             User.detailViews(this.people.get(id), this.user)
+          ).render();
+        }.bind(this)
+      });
+    },
+    
+    editUser: function(id) {
+      this.people.fetch({
+        success: function() {
+          app.useLayout('layout/page').setViews(
+            User.editViews(this.people.get(id))
           ).render();
         }.bind(this)
       });

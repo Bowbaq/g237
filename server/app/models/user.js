@@ -76,6 +76,8 @@ User.helpers = _.extend(User.helpers || {}, {
   },
   
   update: function(id, data, callback) {
+    data = _.pick(data, 'name');
+    
     User.findByIdAndUpdate(id, data, function(err, project) {
       if(err) {
         callback(err, null);
