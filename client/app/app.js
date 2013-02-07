@@ -7,7 +7,7 @@ define([
   var app = {
     // The root path to run the application.
     root: "/",
-    api_root: "http://10.0.0.2:8888/"
+    api_root: "http://169.254.7.139:8888/"
   };
 
   // Localize or create a new JavaScript Template object.
